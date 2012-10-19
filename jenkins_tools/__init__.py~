@@ -1,0 +1,5 @@
+try:
+    import pkg_resources
+    __version__ = pkg_resources.require("jenkins-tools")[0].version
+except ImportError:
+    __version__ = 'unset'
