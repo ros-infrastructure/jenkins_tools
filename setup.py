@@ -10,7 +10,10 @@ setup(
     scripts = ['scripts/run_chroot_jenkins_now',
                'scripts/run_chroot_jenkins_periodic',
                'scripts/run_chroot_jenkins_vcs',
-               'scripts/run_chroot_local'],
+               'scripts/run_chroot_local',
+               'scripts/chroot_create.sh',
+               'scripts/chroot_update.sh',
+               'scripts/chroot_dispatch.sh'],
     install_requires=[
         'empy >= 3.1',
         'PyYAML >= 3.10',

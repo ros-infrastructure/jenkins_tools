@@ -13,32 +13,19 @@ echo "Arguments for script: " $SCRIPT_ARGS
 sudo apt-get update
 sudo apt-get -y install pbuilder
 
-
-#  update buildfarm utils
+#  get latest version of jenkins scripts
 cd $WORKSPACE
-if [ -d buildfarm ] ; then
-  cd buildfarm
+if [ -d jenkins_scripts ] ; then
+  cd jenkins_scripts
   git clean -dfx
   git reset --hard HEAD
   git pull
   cd ..
 else
-  git clone git://github.com/willowgarage/buildfarm.git
+  git clone git@github.com:ros-infrastructure/jenkins_scripts.git
 fi
-if [ -d catkin-debs ] ; then
-  cd catkin-debs
-  git clean -dfx
-  git reset --hard HEAD
-  git pull
-  cd ..
-else
-  git clone git://github.com/willowgarage/catkin-debs.git
-fi
-
-. ./buildfarm/buildfarm_util.sh
 
 export > env
-
 
 sudo mkdir -p /var/cache/pbuilder/ccache
 sudo chmod a+w /var/cache/pbuilder/ccache
@@ -56,7 +43,6 @@ export UBUNTU_DISTRO=$UBUNTU_DISTRO
 export ARCH=$ARCH
 
 export WORKSPACE=$WORKSPACE
-export PYTHONPATH=$WORKSPACE/catkin-debs/src/buildfarm:$PYTHONPATH
 
 if [ -d \$HOME/.ssh ]; then
   cp -a \$HOME/.ssh /root
@@ -70,13 +56,13 @@ pwd
 ls -l
 cd $WORKSPACE
 ls -l
-chmod 755 $WORKSPACE/buildfarm/${SCRIPT}
+chmod 755 $WORKSPACE/jenkins_scripts/${SCRIPT}
 
 echo "============================================================"
 echo "==== Begin" $SCRIPT "script.    Ignore the output above ====="
 echo "============================================================"
 
-$WORKSPACE/buildfarm/${SCRIPT} ${SCRIPT_ARGS}
+$WORKSPACE/jenkins_scripts/${SCRIPT} ${SCRIPT_ARGS}
 
 echo "============================================================"
 echo "==== End" $SCRIPT "script.    Ignore the output below ====="
@@ -93,7 +79,7 @@ TOP=$(cd `dirname $0` ; /bin/pwd)
 
 tmpdir=`mktemp -d`
 basetgz_filename=$tmpdir/basetgz
-$WORKSPACE/buildfarm/create_chroot.sh $IMAGETYPE $UBUNTU_DISTRO $ARCH $basetgz_filename
+chroot_create.sh $IMAGETYPE $UBUNTU_DISTRO $ARCH $basetgz_filename
 basetgz=`cat $basetgz_filename`
 rm -rf $tmpdir
 
@@ -106,7 +92,7 @@ rm -rf $tmpdir
 sudo pbuilder execute \
     --basetgz $basetgz \
     --bindmounts "/var/cache/pbuilder/ccache $WORKSPACE $HOME/.ssh" \
-    --inputfile $WORKSPACE/buildfarm/$SCRIPT \
+    --inputfile $WORKSPACE/jenkins_scripts/$SCRIPT \
     -- $WORKSPACE/pbuilder-env.sh $SCRIPT
 
 

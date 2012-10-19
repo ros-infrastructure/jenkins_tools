@@ -13,7 +13,7 @@ export UBUNTU_DISTRO=$1
 export OS_PLATFORM=$1
 export ARCH=$2
 export WORKSPACE=$(readlink -f $3)
-export SCRIPT="scripts/"$4
+export SCRIPT=$4
 
 # get extra arguments of script
 cnt=1
