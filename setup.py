@@ -8,7 +8,7 @@ setup(
     packages=['jenkins_tools'],
     package_dir = {'jenkins_tools':'src/jenkins_tools'},
     scripts = ['scripts/run_chroot_jenkins_now',
-               'scripts/run_chroot_jenkins_periodicy',
+               'scripts/run_chroot_jenkins_periodic',
                'scripts/run_chroot_jenkins_vcs',
                'scripts/run_chroot_local'],
     install_requires=[
@@ -19,8 +19,7 @@ setup(
         'rosdep >= 0.10.3',
         'rospkg >= 1.0.6',
         'catkin-pkg >= 0.1.2',
-        'distribute >= 0.6.24'
-    ],
+        'distribute >= 0.6.24'],
     author='Wim Meeussen',
     author_email='wim@hidof.com',
     maintainer='Wim Meeussen',
@@ -34,5 +33,4 @@ setup(
     long_description="""
 A tool for running scripts in a chroot environment on Jenkins or locally""",
     license='BSD'
-    }
 )
