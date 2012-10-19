@@ -33,8 +33,6 @@ echo "  - script:        " $SCRIPT
 echo "  - workspace:     " $WORKSPACE
 echo "  - script args:   " $SCRIPT_ARGS
 
-# get the latest dispatch script
-wget https://raw.github.com/willowgarage/buildfarm/master/dispatch.sh -O $WORKSPACE/build.sh
-
+# dispatch the chroot
 cd $WORKSPACE
-bash ./build.sh $SCRIPT_ARGS
+bash chroot_dispatch.sh $SCRIPT_ARGS
