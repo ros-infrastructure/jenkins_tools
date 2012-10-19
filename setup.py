@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jenkins_tools',
-    version='0.2.0',
+    version='0.0.2',
     packages=find_packages(exclude=['test']),
     package_data={
         'jenkins_tools.generators.debian':
@@ -16,6 +16,7 @@ setup(
         'jenkins >= 0.2',
         'argparse >= 1.2.1',
         'rosdep >= 0.10.3',
+        'rospkg >= 1.0.6',
         'catkin-pkg >= 0.1.2',
         'distribute >= 0.6.24'
     ],
@@ -35,10 +36,10 @@ A tool for running scripts in a chroot environment on Jenkins or locally""",
     test_suite='test',
     entry_points={
         'console_scripts': [
-            'git-jenkins_tools-run_jenkins_now = jenkins_tools.commands.config:main',
-            'git-jenkins_tools-run_jenkins_periodic-upstream = jenkins_tools.commands.import_upstream:main',
-            'git-jenkins_tools-run_jenkins_vcs = jenkins_tools.commands.branch:main',
-            'git-jenkins_tools-run_local = jenkins_tools.commands.patch.patch_main:main'
+            'run_chroot_jenkins_now = jenkins_tools.commands.config:main',
+            'run_chroot_jenkins_periodic = jenkins_tools.commands.import_upstream:main',
+            'run_chroot_jenkins_vcs = jenkins_tools.commands.branch:main',
+            'run_chroot_local = jenkins_tools.commands.patch.patch_main:main'
         ]
     }
 )
