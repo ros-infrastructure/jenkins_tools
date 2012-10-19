@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+
+import sys
+import jenkins
+import urllib
+import yaml
+import subprocess
+import os
+import jenkins_tools
+
+ubuntu_distro = {'fuerte': ['precise'],
+                 'groovy': ['precise']}
+arch = ['amd64']
+
+
+# Schedule all doc jobs on Jenkins
+def main():
+    if len(sys.argv) != 3:
+        print "Usage: %s ros_distro file"%(sys.argv[0])
+        print "Ex: %s fuerte folder_name"%(sys.argv[0])
+        sys.exit(0)
+    ros_distro = sys.argv[1]
+    file_dir = sys.argv[2]
+
+    rosinstall_files = []
+    for ls_file in os.listdir(file_dir):
+        if ls_file.endswith(".rosinstall"):
+            rosinstall_files.append(os.path.splitext(os.path.basename(ls_file))[0])
+
+    # create jenkins instance 
+    with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
+        info = yaml.load(f)
+    jenkins_instance = jenkins.Jenkins('http://jenkins.willowgarage.com:8080/', info['username'], info['password'])
+    print "Created Jenkins instance"
+
+    doc_jobs = []
+    for s in rosinstall_files:
+        if s.endswith('depends'):
+            continue
+
+        for u in ubuntu_distro[ros_distro]:
+            for a in arch:
+                job_name = jenkins_tools.run_jenkins_now(jenkins_instance, u, a, ros_distro+'-'+s, "eitan@hidof.com", "doc", [ros_distro, s], info['username'])
+                print "\n"
+                doc_jobs.append(job_name)
+
+    # delete old jobs
+    remove = []
+    current_jobs = [j['name'] for j in jenkins_instance.get_jobs()]
+    for c in current_jobs:
+        if 'doc-%s'%ros_distro in c and not c in doc_jobs:
+            remove.append(c)
+
+    for r in remove:
+        jenkins_instance.delete_job(r)
+        print "Deleted old job %s"%r
+
+if __name__ == "__main__":
+    main()

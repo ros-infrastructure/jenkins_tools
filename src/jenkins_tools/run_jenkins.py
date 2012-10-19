@@ -6,29 +6,20 @@ import urllib
 import yaml
 import datetime
 import os
-from jenkins_tools import common
+import pkg_resources
 from rospkg import environment
 
 
 
-def get_jenkins_instance():
-    with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
-        info = yaml.load(f)
-    jenkins_instance = jenkins.Jenkins('http://50.28.61.61:8080/', info['username'], info['password'])
-    return jenkins_instance
-
+jenkins_server = 'http://50.28.61.61:8080/'
 
 
 # Schedule a set of jobs in Jenkins
 def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, script_args, user_name):
 
-    # open template xlm file
-    f = urllib.urlopen('https://raw.github.com/willowgarage/buildfarm/master/templates/jenkins_template.xml')
-    job_xml = f.read()
-
-    # open trigger file
-    f = urllib.urlopen('https://raw.github.com/willowgarage/buildfarm/master/templates/jenkins_conf.yaml')
-    jc = yaml.load(f)
+    job_xml = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_template.xml')
+    jenkins_conf = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_conf.yaml')
+    jc = yaml.load(jenkins_conf)
 
     # get arguments
     params = {}
@@ -68,13 +59,10 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, 
 # Schedule a set of jobs in Jenkins
 def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email, 
                          period, script, script_args, user_name):
-    # open template xlm file
-    f = urllib.urlopen('https://raw.github.com/willowgarage/buildfarm/master/templates/jenkins_template.xml')
-    job_xml = f.read()
 
-    # open trigger file
-    f = urllib.urlopen('https://raw.github.com/willowgarage/buildfarm/master/templates/jenkins_conf.yaml')
-    jc = yaml.load(f)
+    job_xml = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_template.xml')
+    jenkins_conf = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_conf.yaml')
+    jc = yaml.load(jenkins_conf)
 
     # get arguments
     params = {}
@@ -115,13 +103,9 @@ def run_jenkins_vcs(jenkins_instance,
                     ubuntu_distro, arch, name, email, vcs, uri, branch,
                     script, script_args, user_name):
 
-    # open template xlm file
-    f = urllib.urlopen('https://raw.github.com/willowgarage/buildfarm/master/templates/jenkins_template.xml')
-    job_xml = f.read()
-
-    # open trigger file
-    f = urllib.urlopen('https://raw.github.com/willowgarage/buildfarm/master/templates/jenkins_conf.yaml')
-    jc = yaml.load(f)
+    job_xml = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_template.xml')
+    jenkins_conf = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_conf.yaml')
+    jc = yaml.load(jenkins_conf)
 
     # get arguments
     params = {}

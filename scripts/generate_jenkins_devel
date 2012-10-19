@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+
+import sys
+import jenkins
+import urllib
+import yaml
+import subprocess
+import optparse
+import os
+from rospkg import environment
+import jenkins_tools
+
+ubuntu_distro = {'fuerte': ['precise'],
+                 'groovy': ['precise']}
+arch = ['amd64', 'i386']
+
+
+# Schedule all devel jobs on Jenkins
+def main():
+    parser = optparse.OptionParser()
+    parser.add_option("--delete", action="store_true", default=False)
+    (options, args) = parser.parse_args()
+
+    if len(args) != 1:
+        print "Usage: %s ros_distro"%(sys.argv[0])
+        sys.exit(0)
+    ros_distro = args[0]
+    
+    # create jenkins instance 
+    with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
+        info = yaml.load(f)
+    jenkins_instance = jenkins.Jenkins('http://50.28.61.61:8080/', info['username'], info['password'])
+
+    # parse the devel distro file
+    print "Parsing devel yaml file for %s"%ros_distro
+    f = urllib.urlopen('https://raw.github.com/ros/rosdistro/master/releases/%s-devel.yaml'%ros_distro)
+    devel = yaml.load(f.read())['repositories']
+
+    # create all jobs
+    devel_jobs = []
+    for s, conf in devel.iteritems():
+        for u in ubuntu_distro[ros_distro]:
+            for a in arch:
+                if conf['type'] == 'svn':
+                    conf['version'] = ''
+                if not conf['version']:
+                    conf['version'] = ''
+                print "----"
+                job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance, u, a, ros_distro+'-'+s, 'wim@hidof.com', 
+                                                         conf['type'], conf['url'], conf['version'],
+                                                         'devel', [ros_distro, s], info['username'])
+                devel_jobs.append(job_name)
+
+
+    # delete old jobs
+    if options.delete:
+        remove = []
+        current_jobs = [j['name'] for j in jenkins_instance.get_jobs()]
+        for c in current_jobs:
+            if 'devel-%s'%ros_distro in c and not c in devel_jobs:
+                remove.append(c)
+
+        for r in remove:
+            jenkins_instance.delete_job(r)
+            print "Deleted old job %s"%r
+
+
+if __name__ == "__main__":
+    main()

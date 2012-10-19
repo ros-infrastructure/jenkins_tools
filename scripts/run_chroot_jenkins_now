@@ -24,7 +24,9 @@ def main():
     script_args = sys.argv[6:]
 
     # run job
-    jenkins_instance = jenkins_tools.get_jenkins_instance()
+    with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
+        info = yaml.load(f)
+    jenkins_instance = jenkins.Jenkins(jenkins_tools.jenkins_server, info['username'], info['password'])
     job_name = jenkins_tools.run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, script_args, info['username'])
 
 
