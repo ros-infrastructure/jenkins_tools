@@ -5,11 +5,12 @@ from setuptools import setup, find_packages
 setup(
     name='jenkins_tools',
     version='0.0.2',
-    packages=find_packages(exclude=['test']),
-    package_data={
-        'jenkins_tools.generators.debian':
-            ['jenkins_tools/generators/debian/templates/*.em']
-    },
+    packages=['jenkins_tools'],
+    package_dir = {'jenkins_tools':'src/jenkins_tools'},
+    scripts = ['scripts/run_chroot_jenkins_now',
+               'scripts/run_chroot_jenkins_periodicy',
+               'scripts/run_chroot_jenkins_vcs',
+               'scripts/run_chroot_local'],
     install_requires=[
         'empy >= 3.1',
         'PyYAML >= 3.10',
@@ -32,14 +33,6 @@ setup(
     description="A tool for running scripts in a chroot environment on Jenkins or locally",
     long_description="""
 A tool for running scripts in a chroot environment on Jenkins or locally""",
-    license='BSD',
-    test_suite='test',
-    entry_points={
-        'console_scripts': [
-            'run_chroot_jenkins_now = jenkins_tools.commands.config:main',
-            'run_chroot_jenkins_periodic = jenkins_tools.commands.import_upstream:main',
-            'run_chroot_jenkins_vcs = jenkins_tools.commands.branch:main',
-            'run_chroot_local = jenkins_tools.commands.patch.patch_main:main'
-        ]
+    license='BSD'
     }
 )
