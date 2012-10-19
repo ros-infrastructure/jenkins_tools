@@ -1,15 +1,15 @@
 bloom
 =====
 
-A tool for helping release software into gitbuildpackage repositories
+Tools for running scripts in a chroot, on Jenkins or locally
 
 
 Code & tickets
 --------------
 
-+--------------+------------------------------------+
-| bloom        | http://github.com/ros/bloom        |
-+--------------+------------------------------------+
-| Issues       | http://github.com/ros/bloom/issues |
-+--------------+------------------------------------+
++----------------------+-----------------------------------------------------------+
+| jenkins_tools        | http://github.com/ros-infrastructure/jenkins_tools        |
++----------------------+-----------------------------------------------------------+
+| Issues               | http://github.com/ros-infrastructure/jenkins_tools/issues |
++----------------------+-----------------------------------------------------------+
 
