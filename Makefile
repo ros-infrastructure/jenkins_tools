@@ -46,8 +46,7 @@ install: distro
 	sudo checkinstall python setup.py install
 
 deb_dist:
-	# need to convert unstable to each distro and repeat
-	python setup.py --command-packages=stdeb.command sdist_dsc  bdist_deb
+	python setup.py --command-packages=stdeb.command sdist_dsc --workaround-548392=False bdist_deb
 
 upload-packages: deb_dist
 	dput -u -c dput.cf all-shadow ${OUTPUT_DIR}/${NAME}_${`./setup.py --version`}-1_amd64.changes 
