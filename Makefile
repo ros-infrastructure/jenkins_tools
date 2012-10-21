@@ -3,6 +3,8 @@
 NAME=jenkins_tools
 VERSION=`./setup.py --version`
 
+CHANGENAME=jenkinstools
+
 OUTPUT_DIR=deb_dist
 
 USERNAME := $(shell whoami)
@@ -50,12 +52,12 @@ deb_dist:
 	python setup.py --command-packages=stdeb.command sdist_dsc --workaround-548392=False bdist_deb
 
 upload-packages: deb_dist
-	dput -u -c dput.cf all-shadow ${OUTPUT_DIR}/${NAME}_${VERSION}-1_amd64.changes 
-	dput -u -c dput.cf all-shadow-fixed ${OUTPUT_DIR}/${NAME}_${VERSION}-1_amd64.changes 
-	dput -u -c dput.cf all-ros ${OUTPUT_DIR}/${NAME}_${VERSION}-1_amd64.changes 
+	dput -u -c dput.cf all-shadow ${OUTPUT_DIR}/${CHANGENAME}_${VERSION}-1_amd64.changes 
+	dput -u -c dput.cf all-shadow-fixed ${OUTPUT_DIR}/${CHANGENAME}_${VERSION}-1_amd64.changes 
+	dput -u -c dput.cf all-ros ${OUTPUT_DIR}/${CHANGENAME}_${VERSION}-1_amd64.changes 
 
 upload-building: deb_dist
-	dput -u -c dput.cf all-building ${OUTPUT_DIR}/${NAME}_${VERSION}-1_amd64.changes 
+	dput -u -c dput.cf all-building ${OUTPUT_DIR}/${CHANGENAME}_${VERSION}-1_amd64.changes 
 
 upload: upload-building upload-packages
 
