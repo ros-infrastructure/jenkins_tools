@@ -24,13 +24,8 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-echo &quot;_________________________________BEGIN SCRIPT______________________________________&quot;
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu @(UBUNTU_DISTRO) main" > /etc/apt/sources.list.d/ros-latest.list'
-wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
-sudo apt-get update
-sudo apt-get install python-jenkins-tools
+sudo apt-get install python-jenkins-tools --yes
 bash run_chroot_local @(UBUNTU_DISTRO) @(ARCH) $WORKSPACE @(SCRIPT) @(SCRIPT_ARGS)
-echo &quot;_________________________________END SCRIPT_______________________________________&quot;
      </command>
     </hudson.tasks.Shell>
   </builders>
