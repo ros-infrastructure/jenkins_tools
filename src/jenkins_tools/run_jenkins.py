@@ -90,9 +90,6 @@ def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email,
     else:
         jenkins_instance.create_job(job_name, job_xml)
         print "Created job %s"%job_name
-    jenkins_instance.build_job(job_name)
-    print "Started job %s"%job_name
-    print "When the test finishes, you will receive an email at %s"%params['EMAIL']
     return job_name
 
 
@@ -133,10 +130,6 @@ def run_jenkins_vcs(jenkins_instance,
     else:
         jenkins_instance.create_job(job_name, job_xml)
         print "Created job %s"%job_name
-    jenkins_instance.build_job(job_name)
-    print "Started job %s"%job_name
-    print "When the test finishes, you will receive an email at %s"%params['EMAIL']
-    
     return job_name
 
 
