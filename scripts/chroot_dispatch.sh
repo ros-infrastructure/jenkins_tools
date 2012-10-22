@@ -22,7 +22,7 @@ if [ -d jenkins_scripts ] ; then
   git pull
   cd ..
 else
-  git clone git@github.com:ros-infrastructure/jenkins_scripts.git
+  git clone http://github.com/ros-infrastructure/jenkins_scripts.git
 fi
 
 export > env
