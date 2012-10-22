@@ -19,6 +19,7 @@ arch = ['amd64', 'i386']
 def main():
     parser = optparse.OptionParser()
     parser.add_option("--delete", action="store_true", default=False)
+    parser.add_option("--run", action="store_true", default=False)
     (options, args) = parser.parse_args()
 
     if len(args) != 1:
@@ -45,11 +46,17 @@ def main():
                     conf['version'] = ''
                 if not conf['version']:
                     conf['version'] = ''
-                print "----"
                 job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance, u, a, ros_distro+'-'+s, 'wim@hidof.com', 
                                                          conf['type'], conf['url'], conf['version'],
                                                          'devel', [ros_distro, s], info['username'])
                 devel_jobs.append(job_name)
+
+
+    # run jobs right now
+    if options.run:
+        for d in devel_jobs:
+            jenkins_instance.build_job(d)
+            print "Started job %s"%d            
 
 
     # delete old jobs
