@@ -32,13 +32,11 @@ else
   else
     git clone http://github.com/ros-infrastructure/jenkins_scripts.git
   fi
-  cd jenkins_scripts
-  git log -n 1
-  cd ..
+  cd jenkins_scripts && git log -n 1
 fi
 
+cd $WORKSPACE
 export > env
-
 sudo mkdir -p /var/cache/pbuilder/ccache
 sudo chmod a+w /var/cache/pbuilder/ccache
 
