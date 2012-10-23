@@ -30,7 +30,7 @@ def main():
     if len(name) > 30:
         name = name[:28]+"..."
     name = ros_distro+"-"+name
-    script_args = ['--depends-on', ros_distro] + repositories
+    script_args = ['--depends_on', ros_distro] + repositories
     
     # create jenkins instance 
     with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
