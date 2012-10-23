@@ -43,6 +43,7 @@ def main():
             job_name = jenkins_tools.run_jenkins_now(jenkins_instance, ubuntu, arch, name, email, 
                                                      'prerelease', script_args, info['username'])
             jenkins_instance.build_job(job_name)
+            print "----"
 
 if __name__ == "__main__":
     main()
