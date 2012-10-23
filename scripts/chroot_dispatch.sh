@@ -32,6 +32,7 @@ else
   else
     git clone http://github.com/ros-infrastructure/jenkins_scripts.git
   fi
+  cd jenkins_scripts && git log -n 1
 fi
 
 export > env
