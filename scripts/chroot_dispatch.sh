@@ -32,7 +32,9 @@ else
   else
     git clone http://github.com/ros-infrastructure/jenkins_scripts.git
   fi
-  cd jenkins_scripts && git log -n 1
+  cd jenkins_scripts
+  git log -n 1
+  cd ..
 fi
 
 export > env
@@ -80,7 +82,7 @@ echo "============================================================"
 
 EOF
 
-
+cat pbuilder-env.sh
 chmod 755 pbuilder-env.sh
 
 TOP=$(cd `dirname $0` ; /bin/pwd)
