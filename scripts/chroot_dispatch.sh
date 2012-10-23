@@ -15,14 +15,23 @@ sudo apt-get -y install pbuilder
 
 #  get latest version of jenkins scripts
 cd $WORKSPACE
-if [ -d jenkins_scripts ] ; then
-  cd jenkins_scripts
-  git clean -dfx
-  git reset --hard HEAD
-  git pull
-  cd ..
+if [ -e $WORKSPACE/run_debug_mode ] ; then
+  /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
+  /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
+  /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
+  /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
+  /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
+  /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
 else
-  git clone http://github.com/ros-infrastructure/jenkins_scripts.git
+  if [ -d jenkins_scripts ] ; then
+    cd jenkins_scripts
+    git clean -dfx
+    git reset --hard HEAD
+    git pull
+    cd ..
+  else
+    git clone http://github.com/ros-infrastructure/jenkins_scripts.git
+  fi
 fi
 
 export > env
