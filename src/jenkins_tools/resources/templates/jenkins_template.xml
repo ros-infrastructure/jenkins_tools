@@ -24,6 +24,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
+sudo apt-get update
 sudo apt-get install python-jenkins-tools --yes
 bash run_chroot_local @(UBUNTU_DISTRO) @(ARCH) $WORKSPACE @(SCRIPT) @(SCRIPT_ARGS)
      </command>
