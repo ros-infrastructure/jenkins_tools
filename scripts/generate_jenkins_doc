@@ -6,31 +6,52 @@ import urllib
 import yaml
 import subprocess
 import os
+import optparse
+from rospkg import environment
 import jenkins_tools
+import tempfile
+import shutil
 
 ubuntu_distro = {'fuerte': ['precise'],
                  'groovy': ['precise']}
 arch = ['amd64']
 
+def get_distro_rosinstalls(distro):
+    temp_dir = tempfile.mkdtemp()
+    helper = subprocess.Popen(["git", "clone", "git://github.com/ros/rosdistro.git", temp_dir])
+    res, err = helper.communicate()
+    if helper.returncode != 0:
+        print "Failed to checkout doc repo!"
+        return []
+
+    print "Building list of repos for distro %s" % distro
+
+    rosinstall_files = []
+    for ls_file in os.listdir(os.path.join(temp_dir, "doc/%s" % distro)):
+        if ls_file.endswith(".rosinstall"):
+            rosinstall_files.append(os.path.splitext(os.path.basename(ls_file))[0])
+    shutil.rmtree(temp_dir)
+
+    return rosinstall_files
 
 # Schedule all doc jobs on Jenkins
 def main():
-    if len(sys.argv) != 3:
-        print "Usage: %s ros_distro file"%(sys.argv[0])
-        print "Ex: %s fuerte folder_name"%(sys.argv[0])
+    parser = optparse.OptionParser()
+    parser.add_option("--delete", action="store_true", default=False)
+    parser.add_option("--run", action="store_true", default=False)
+    (options, args) = parser.parse_args()
+    if len(args) != 1:
+        print "Usage: %s ros_distro"%(sys.argv[0])
+        print "Ex: %s fuerte"%(sys.argv[0])
         sys.exit(0)
-    ros_distro = sys.argv[1]
-    file_dir = sys.argv[2]
+    ros_distro = args[0]
 
-    rosinstall_files = []
-    for ls_file in os.listdir(file_dir):
-        if ls_file.endswith(".rosinstall"):
-            rosinstall_files.append(os.path.splitext(os.path.basename(ls_file))[0])
+    rosinstall_files = get_distro_rosinstalls(ros_distro)
 
     # create jenkins instance 
     with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
         info = yaml.load(f)
-    jenkins_instance = jenkins.Jenkins('http://jenkins.willowgarage.com:8080/', info['username'], info['password'])
+    jenkins_instance = jenkins.Jenkins('http://50.28.61.61:8080/', info['username'], info['password'])
     print "Created Jenkins instance"
 
     doc_jobs = []
@@ -40,20 +61,26 @@ def main():
 
         for u in ubuntu_distro[ros_distro]:
             for a in arch:
-                job_name = jenkins_tools.run_jenkins_now(jenkins_instance, u, a, ros_distro+'-'+s, "eitan@hidof.com", "doc", [ros_distro, s], info['username'])
+                job_name = jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, ros_distro+'-'+s, "eitan@hidof.com", "nightly", "doc", [ros_distro, s], info['username'])
+                if options.run:
+                    print "Running %s" % job_name
+                    jenkins_instance.build_job(job_name)
                 print "\n"
                 doc_jobs.append(job_name)
 
     # delete old jobs
-    remove = []
-    current_jobs = [j['name'] for j in jenkins_instance.get_jobs()]
-    for c in current_jobs:
-        if 'doc-%s'%ros_distro in c and not c in doc_jobs:
-            remove.append(c)
+    if options.delete:
+        print "Checking for jobs to delete..."
+        remove = []
+        current_jobs = [j['name'] for j in jenkins_instance.get_jobs()]
+        for c in current_jobs:
+            if 'doc-%s'%ros_distro in c and not c in doc_jobs:
+                remove.append(c)
+        print "done"
 
-    for r in remove:
-        jenkins_instance.delete_job(r)
-        print "Deleted old job %s"%r
+        for r in remove:
+            jenkins_instance.delete_job(r)
+            print "Deleted old job %s"%r
 
 if __name__ == "__main__":
     main()
