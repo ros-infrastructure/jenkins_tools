@@ -1,0 +1,85 @@
+#!/usr/bin/env python
+
+import sys
+import jenkins
+import urllib
+import yaml
+import subprocess
+import optparse
+import os
+from rospkg import environment
+import jenkins_tools
+import termios
+import tty
+
+def getch():
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            ch = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+
+# Schedule all devel jobs on Jenkins
+def main():
+    parser = optparse.OptionParser()
+    parser.add_option("--starts_with", action="store", default=None)
+    parser.add_option("--ends_with", action="store", default=None)
+    parser.add_option("--contains", action="store", default=None)
+    (options, args) = parser.parse_args()
+
+    if len(args) != 0:
+        print "Usage: %s"%(sys.argv[0])
+        sys.exit(0)
+    
+    # create jenkins instance 
+    with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
+        info = yaml.load(f)
+    jenkins_instance = jenkins.Jenkins('http://50.28.61.61:8080/', info['username'], info['password'])
+    #jenkins_instance = jenkins.Jenkins('http://build.willowgarage.com/', info['username'], info['password'])
+
+    # get a list of all jobs
+    jobs = [j['name'] for j in jenkins_instance.get_jobs()]
+
+    # select jobs
+    if options.starts_with:
+        jobs = [j for j in jobs if j[:len(options.starts_with)] == options.starts_with]
+    if options.ends_with:
+        jobs = [j for j in jobs if j[-len(options.starts_with):] == options.ends_with]
+    if options.contains:
+        jobs = [j for j in jobs if options.contains in j]
+
+    if len(jobs) == 0:
+        print "No jobs found that match these criteria"
+        return
+
+    print
+    print "THESE JOBS WILL BE DELETED!!!!!!!!"
+    print
+    for j in jobs:
+        print j
+    print
+    print "THESE JOBS WILL BE DELETED!!!!!!!!"
+    print
+
+    add = ''
+    for i in range(4):
+        add += "really "
+        print "Are you %ssure? (y/n)"%add
+        key = getch()
+        while not key in ['y', 'Y', 'n', 'N']:
+            key = getch()
+        if key in ['n', 'N']:
+            return
+
+    # delete jobs
+    print "Okay, here we go"
+    for j in jobs:
+        jenkins_instance.delete_job(j)
+        print "Deleted %s"%j
+
+
+if __name__ == "__main__":
+    main()
