@@ -18,7 +18,7 @@ if [ ! -f $IMAGEFILE ] ; then
     sudo flock $IMAGELOCK -c "pbuilder --create --distribution $DISTRO --architecture $ARCH --basetgz $IMAGEFILE --debootstrapopts --variant=buildd --components \"main universe multiverse\" --othermirror \"deb http://aptproxy.willowgarage.com/us.archive.ubuntu.com/ubuntu/ $DISTRO-updates main restricted\" --debootstrapopts --keyring=/etc/apt/trusted.gpg"
 fi
 
-UPDATE=chroot_update.sh
+UPDATE=/usr/bin/chroot_update.sh
 
 # get timestamp of image
 if [ ! -f $IMAGESTAMPFILE ] ; then
@@ -29,7 +29,7 @@ fi
 /bin/echo "Image stamp is $IMAGESTAMP"
 
 # get timestamp of chroot_update script
-REPOSTAMP=$(cat /usr/bin/chroot_update.sh | grep "#stamp:" | cut -b 9-)
+REPOSTAMP=$(cat $UPDATE | grep "#stamp:" | cut -b 9-)
 /bin/echo "Repo stamp is $REPOSTAMP"
 
 
