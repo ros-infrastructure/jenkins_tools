@@ -1,5 +1,5 @@
 #!/bin/sh -ex
-#stamp: 1351189727
+#stamp: 1351191507
 
 /bin/echo "vvvvvvvvvvvvvvvvvvv  update_chroot.sh vvvvvvvvvvvvvvvvvvvvvv"
 
