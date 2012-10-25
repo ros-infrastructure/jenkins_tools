@@ -45,13 +45,6 @@ cat > pbuilder-env.sh <<EOF
 /bin/echo "vvvvvvvvvvvvvvvvvvv  pbuilder-env.sh vvvvvvvvvvvvvvvvvvvvvv"
 export CCACHE_DIR="/var/cache/pbuilder/ccache"
 export PATH="/usr/lib/ccache:${PATH}"
-export IMAGETYPE=$IMAGETYPE
-
-export OS_NAME=$OS_NAME
-export OS_PLATFORM=$OS_PLATFORM
-export UBUNTU_DISTRO=$UBUNTU_DISTRO
-export ARCH=$ARCH
-
 export WORKSPACE=$WORKSPACE
 
 if [ -d \$HOME/.ssh ]; then
@@ -85,7 +78,7 @@ TOP=$(cd `dirname $0` ; /bin/pwd)
 
 tmpdir=`mktemp -d`
 basetgz_filename=$tmpdir/basetgz
-chroot_create.sh $IMAGETYPE $UBUNTU_DISTRO $ARCH $basetgz_filename
+chroot_create.sh $IMAGETYPE $IMAGEVERSION $UBUNTU_DISTRO $ARCH $basetgz_filename
 basetgz=`cat $basetgz_filename`
 rm -rf $tmpdir
 

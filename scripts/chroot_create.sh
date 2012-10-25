@@ -2,16 +2,16 @@
 
 /bin/echo "vvvvvvvvvvvvvvvvvvv  create_chroot.sh vvvvvvvvvvvvvvvvvvvvvv"
 IMAGETYPE=$1
-DISTRO=$2
-ARCH=$3
+IMAGVERSION=$2
+DISTRO=$3
+ARCH=$4
 BASE=/var/cache/pbuilder/$IMAGETYPE.$DISTRO.$ARCH
-BASETGZ_FILENAME=$4
+BASETGZ_FILENAME=$5
 
-BASETGZ_VERSION="0.3"
-BASETGZ=/var/cache/pbuilder/$IMAGETYPE.$DISTRO.$ARCH-$BASETGZ_VERSION.tgz
+BASETGZ=/var/cache/pbuilder/$IMAGETYPE.$DISTRO.$ARCH-$IMAGVERSION.tgz
 
 echo $BASETGZ > $BASETGZ_FILENAME
-ROOTDIR=$BASE/apt-conf-$BASETGZ_VERSION
+ROOTDIR=$BASE/apt-conf-$IMAGVERSION
 IMAGELOCK=/var/cache/pbuilder/$IMAGETYPE.$DISTRO.$ARCH.updatelock
 IMAGESTAMPFILE=/var/cache/pbuilder/$IMAGETYPE.$DISTRO.$ARCH.version
 
