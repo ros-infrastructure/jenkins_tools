@@ -20,7 +20,7 @@ fi
 
 UPDATE=/usr/bin/chroot_update.sh
 
-# get timestamp of image
+# get version stamp of image
 if [ ! -f $IMAGESTAMPFILE ] ; then
     IMAGESTAMP=0
 else
@@ -28,12 +28,13 @@ else
 fi
 /bin/echo "Image stamp is $IMAGESTAMP"
 
-# get timestamp of chroot_update script
-REPOSTAMP=$(cat $UPDATE | grep "#stamp:" | cut -b 9-)
+# get version stamp of chroot_update script
+sudo apt-get install apt-show-versions --yes
+REPOSTAMP=$(apt-show-versions python-jenkins-tools  | awk '{for (i = 0; i < 10; i++)  if ( !match($i, " ") && match($i, "[0-9].[0-9]") ) print $i}')
 /bin/echo "Repo stamp is $REPOSTAMP"
 
 
-if [ $REPOSTAMP -gt $IMAGESTAMP ] ; then
+if [ $IMAGESTAMP != $REPOSTAMP ] ; then
 
     /bin/echo "chroot_update has been updated, so let's update the chroot tar"
     /bin/echo $REPOSTAMP > stamp.tmp

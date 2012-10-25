@@ -46,6 +46,7 @@ cat > pbuilder-env.sh <<EOF
 export CCACHE_DIR="/var/cache/pbuilder/ccache"
 export PATH="/usr/lib/ccache:${PATH}"
 export WORKSPACE=$WORKSPACE
+export OS_PLATFORM=$OS_PLATFORM
 
 if [ -d \$HOME/.ssh ]; then
   cp -a \$HOME/.ssh /root
