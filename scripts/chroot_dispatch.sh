@@ -62,10 +62,7 @@ if [ -d \$HOME/.subversion ]; then
   cp -a \$HOME/.subversion /root
   chown -R root.root /root/.subversion
 fi
-pwd
-ls -l
 cd $WORKSPACE
-ls -l
 chmod 755 $WORKSPACE/jenkins_scripts/${SCRIPT}
 
 echo "============================================================"
@@ -80,7 +77,6 @@ echo "============================================================"
 
 EOF
 
-cat pbuilder-env.sh
 chmod 755 pbuilder-env.sh
 
 TOP=$(cd `dirname $0` ; /bin/pwd)
