@@ -79,7 +79,7 @@ def main():
     for j in jobs:
         jenkins_instance.delete_job(j)
         print "Deleted %s"%j
-    print "Done!!"
+    print "Done!!!"
 
 if __name__ == "__main__":
     main()
