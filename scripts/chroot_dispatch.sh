@@ -10,7 +10,7 @@ done
 echo "Arguments for script: " $SCRIPT_ARGS
 
 #always ask for pbuilder to make sure we have the updated patched version
-sudo apt-get update
+#sudo apt-get update  --> this is done in the Jenkins script, right before dispatch is called
 sudo apt-get -y install pbuilder
 
 #  get latest version of jenkins scripts
@@ -81,7 +81,7 @@ chmod 755 pbuilder-env.sh
 
 TOP=$(cd `dirname $0` ; /bin/pwd)
 
-/usr/bin/env
+#/usr/bin/env
 
 tmpdir=`mktemp -d`
 basetgz_filename=$tmpdir/basetgz
