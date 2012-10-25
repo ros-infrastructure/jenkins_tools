@@ -29,7 +29,7 @@ fi
 /bin/echo "Image stamp is $IMAGESTAMP"
 
 # get timestamp of chroot_update script
-REPOSTAMP=$(cat /usr/bin/chroot_update | grep "#stamp:" | cut -b 9-)
+REPOSTAMP=$(cat /usr/bin/chroot_update.sh | grep "#stamp:" | cut -b 9-)
 /bin/echo "Repo stamp is $REPOSTAMP"
 
 
