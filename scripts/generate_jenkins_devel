@@ -12,7 +12,7 @@ import jenkins_tools
 
 ubuntu_distro = {'fuerte': ['precise'],
                  'groovy': ['precise']}
-arch = ['amd64', 'i386']
+arch = ['amd64']
 
 
 # Schedule all devel jobs on Jenkins
@@ -64,7 +64,7 @@ def main():
         remove = []
         current_jobs = [j['name'] for j in jenkins_instance.get_jobs()]
         for c in current_jobs:
-            if 'devel-%s'%ros_distro in c and not c in devel_jobs:
+            if 'devel-%s-'%ros_distro in c and not c in devel_jobs:
                 remove.append(c)
 
         for r in remove:
