@@ -5,7 +5,6 @@ import jenkins
 import urllib
 import yaml
 import subprocess
-import optparse
 import os
 from rospkg import environment
 import jenkins_tools
@@ -17,15 +16,12 @@ archs = ['amd64', 'i386']
 
 # Schedule all devel jobs on Jenkins
 def main():
-    parser = optparse.OptionParser()
-    (options, args) = parser.parse_args()
-
-    if len(args) <= 2:
+    if len(sys.argv) <= 3:
         print "Usage: %s email ros_distro [distribution]"%(sys.argv[0])
         sys.exit(0)
-    email = args[0]
-    ros_distro = args[1]
-    repositories = args[2:]
+    email = sys.argv[1]
+    ros_distro = sys.argv[2]
+    repositories = sys.argv[3:]
     name = '-'.join(repositories)
     if len(name) > 30:
         name = name[:28]+"..."
