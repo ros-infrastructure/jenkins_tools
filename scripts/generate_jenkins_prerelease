@@ -7,6 +7,7 @@ import yaml
 import subprocess
 import os
 from rospkg import environment
+import optparse
 import jenkins_tools
 
 ubuntus = {'fuerte': ['precise'],
@@ -16,16 +17,22 @@ archs = ['amd64', 'i386']
 
 # Schedule all devel jobs on Jenkins
 def main():
-    if len(sys.argv) <= 3:
-        print "Usage: %s email ros_distro [distribution]"%(sys.argv[0])
+    parser = optparse.OptionParser()
+    parser.add_option("--name", action="store", default=None)
+    (options, args) = parser.parse_args()
+    if len(args) <= 3 or len(args)%2 != 0:
+        print "Usage: %s email ros_distro [distro version]"%(sys.argv[0])
         sys.exit(0)
-    email = sys.argv[1]
-    ros_distro = sys.argv[2]
-    script_args = sys.argv[3:]
+
+    email = args[0]
+    ros_distro = args[1]
+    script_args = args[2:]
     name = '-'.join(script_args)
-    if len(name) > 30:
-        name = name[:28]+"..."
     name = ros_distro+"-"+name
+    if options.name:
+        name = options.name + "-" + name
+    if len(name) > 50:
+        name = name[:48]+"..."
     script_args = [ros_distro] + script_args
     
     # create jenkins instance 
