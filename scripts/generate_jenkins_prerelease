@@ -21,12 +21,12 @@ def main():
         sys.exit(0)
     email = sys.argv[1]
     ros_distro = sys.argv[2]
-    repositories = sys.argv[3:]
-    name = '-'.join(repositories)
+    script_args = sys.argv[3:]
+    name = '-'.join(script_args)
     if len(name) > 30:
         name = name[:28]+"..."
     name = ros_distro+"-"+name
-    script_args = ['--depends_on', ros_distro] + repositories
+    script_args = [ros_distro] + script_args
     
     # create jenkins instance 
     with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
