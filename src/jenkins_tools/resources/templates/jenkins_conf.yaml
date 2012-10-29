@@ -6,7 +6,7 @@
     'daily': ' <triggers class="vector"> <hudson.triggers.TimerTrigger> <spec>0 13 * * *</spec> </hudson.triggers.TimerTrigger> </triggers>'
     'weekly': ' <triggers class="vector"> <hudson.triggers.TimerTrigger> <spec>0 2 * * 0</spec> </hudson.triggers.TimerTrigger> </triggers>'
     'monthly': ' <triggers class="vector"> <hudson.triggers.TimerTrigger> <spec>0 4 1 * *</spec> </hudson.triggers.TimerTrigger> </triggers>'
-  'vcs': '<triggers class="vector"> <hudson.triggers.SCMTrigger> <spec>*/20 * * * *</spec> </hudson.triggers.SCMTrigger> </triggers>'
+  'vcs': '<triggers class="vector"> <hudson.triggers.SCMTrigger> <spec>*/59 * * * *</spec> </hudson.triggers.SCMTrigger> </triggers>'
 'vcs':
   'none' : '<scm class="hudson.scm.NullSCM"/>'
   'svn' : '<scm class="hudson.scm.SubversionSCM"><locations><hudson.scm.SubversionSCM_-ModuleLocation><remote>@(URI)</remote><local>monitored_vcs</local></hudson.scm.SubversionSCM_-ModuleLocation></locations><useUpdate>false</useUpdate><doRevert>false</doRevert><excludedRegions/><includedRegions/><excludedUsers/><excludedRevprop/><excludedCommitMessages/></scm>'
