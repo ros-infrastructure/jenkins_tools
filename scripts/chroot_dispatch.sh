@@ -23,15 +23,8 @@ if [ -e $WORKSPACE/run_debug_mode ] ; then
   /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
   /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
 else
-  if [ -d jenkins_scripts ] ; then
-    cd jenkins_scripts
-    git clean -dfx
-    git reset --hard HEAD
-    git pull
-    cd ..
-  else
-    git clone http://github.com/ros-infrastructure/jenkins_scripts.git
-  fi
+  rm -rf jenkins_scripts
+  git clone http://github.com/ros-infrastructure/jenkins_scripts.git
   cd jenkins_scripts && git log -n 1
 fi
 
