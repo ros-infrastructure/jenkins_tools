@@ -26,6 +26,7 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, 
     params['UBUNTU_DISTRO'] = ubuntu_distro
     params['ARCH'] = arch
     params['EMAIL'] = email
+    params['EMAIL_COMMITTER'] = 'false'
     params['SCRIPT'] = script
     params['NODE'] = params['SCRIPT']
     params['SCRIPT_ARGS'] = ' '.join(script_args)
@@ -69,6 +70,7 @@ def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email,
     params['UBUNTU_DISTRO'] = ubuntu_distro
     params['ARCH'] = arch
     params['EMAIL'] = email
+    params['EMAIL_COMMITTER'] = 'false'
     params['TRIGGER'] = jc['triggers']['periodic'][period]
     params['SCRIPT'] = script
     params['NODE'] = params['SCRIPT']
@@ -109,6 +111,7 @@ def run_jenkins_vcs(jenkins_instance,
     params['UBUNTU_DISTRO'] = ubuntu_distro
     params['ARCH'] = arch
     params['EMAIL'] = email
+    params['EMAIL_COMMITTER'] = 'true'
     params['TRIGGER'] = jc['triggers']['vcs']
     params['VCS'] = jc['vcs'][vcs].replace('@(URI)', uri).replace('@(BRANCH)', branch)
     params['SCRIPT'] = script
