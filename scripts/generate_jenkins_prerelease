@@ -10,10 +10,13 @@ from rospkg import environment
 import optparse
 import jenkins_tools
 
-ubuntus = {'fuerte': ['precise'],
-           'groovy': ['precise']}
-archs = ['amd64', 'i386']
-
+ubuntu = ['precise']
+arch = ['amd64', 'i386']
+param_names = ['UBUNTU_PARAM', 'ARCH_PARAM']
+param_values = []
+for u in ubuntu:
+    for a in arch:
+        param_values.append({'UBUNTU_PARAM': u, 'ARCH_PARAM': a})
 
 # Schedule all devel jobs on Jenkins
 def main():
@@ -41,12 +44,10 @@ def main():
     jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
 
     # create all jobs
-    for ubuntu in ubuntus[ros_distro]:
-        for arch in archs:
-            job_name = jenkins_tools.run_jenkins_now(jenkins_instance, ubuntu, arch, name, email,
-                                                     'prerelease', script_args, info['username'])
-            jenkins_instance.build_job(job_name)
-            print "----"
+    job_name = jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', name, email,
+                                             'prerelease', script_args, info['username'],
+                                             param_names, param_values)
+    jenkins_instance.build_job(job_name)
 
 if __name__ == "__main__":
     main()

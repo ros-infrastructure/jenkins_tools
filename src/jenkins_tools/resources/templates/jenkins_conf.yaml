@@ -1,6 +1,6 @@
 'triggers':
   'none': '<triggers class="vector"/>'
-  'periodic': 
+  'periodic':
     'continuous': ' <triggers class="vector"> <hudson.triggers.TimerTrigger> <spec>*/5 * * * *</spec> </hudson.triggers.TimerTrigger> </triggers>'
     'nightly': ' <triggers class="vector"> <hudson.triggers.TimerTrigger> <spec>0 3 * * *</spec> </hudson.triggers.TimerTrigger> </triggers>'
     'daily': ' <triggers class="vector"> <hudson.triggers.TimerTrigger> <spec>0 13 * * *</spec> </hudson.triggers.TimerTrigger> </triggers>'
@@ -13,3 +13,7 @@
   'hg' : '<scm class="hudson.plugins.mercurial.MercurialSCM"><source>@(URI)</source><modules/><subdir>monitored_vcs</subdir><clean>false</clean><forest>false</forest><branch>@(BRANCH)</branch>
 </scm>'
   'git': '<scm class="hudson.plugins.git.GitSCM"><configVersion>2</configVersion><userRemoteConfigs><hudson.plugins.git.UserRemoteConfig><name>origin</name><refspec>+refs/heads/*:refs/remotes/origin/*</refspec><url>@(URI)</url></hudson.plugins.git.UserRemoteConfig></userRemoteConfigs><branches><hudson.plugins.git.BranchSpec><name>@(BRANCH)</name></hudson.plugins.git.BranchSpec></branches><disableSubmodules>false</disableSubmodules><recursiveSubmodules>true</recursiveSubmodules><doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations><authorOrCommitter>false</authorOrCommitter><clean>false</clean><wipeOutWorkspace>false</wipeOutWorkspace><pruneBranches>false</pruneBranches><remotePoll>false</remotePoll><ignoreNotifyCommit>false</ignoreNotifyCommit><buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/><gitTool>Default</gitTool><submoduleCfg class="list"/><relativeTargetDir>monitored_vcs</relativeTargetDir><reference/><excludedRegions/><excludedUsers/><gitConfigName/><gitConfigEmail/><skipTag>false</skipTag><includedRegions/><scmName/></scm>'
+
+'params': '<hudson.model.ParametersDefinitionProperty> <parameterDefinitions> @(PARAMS) </parameterDefinitions> </hudson.model.ParametersDefinitionProperty>'
+'add_param': '<hudson.model.StringParameterDefinition> <name>@(PARAM)</name> <description></description> <defaultValue></defaultValue>  </hudson.model.StringParameterDefinition>'
+

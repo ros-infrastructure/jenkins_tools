@@ -10,6 +10,7 @@
   </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
+    @(PARAMETERS)
     <hudson.plugins.trac.TracProjectProperty>
       <tracWebsite>http://code.ros.org/trac/ros/</tracWebsite>
     </hudson.plugins.trac.TracProjectProperty>
