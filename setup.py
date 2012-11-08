@@ -11,6 +11,7 @@ setup(
                'scripts/run_chroot_jenkins_periodic',
                'scripts/run_chroot_jenkins_vcs',
                'scripts/run_chroot_local',
+               'scripts/delete_jenkins',
                'scripts/generate_jenkins_devel',
                'scripts/generate_jenkins_doc',
                'scripts/generate_jenkins_prerelease',
