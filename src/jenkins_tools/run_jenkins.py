@@ -11,7 +11,7 @@ from rospkg import environment
 
 
 
-jenkins_server = 'http://50.28.61.61:8080/'
+JENKINS_SERVER = 'http://jenkins.willowgarage.com:8080/'
 
 
 # Schedule a set of jobs in Jenkins

@@ -1,10 +1,10 @@
 [all-building]
 method                  = scp
 login                   = rosbuild
-fqdn                    = 50.28.27.175
+fqdn                    = jenkins.willowgarage.com
 incoming                = /var/www/repos/building/queue/all
 run_dinstall            = 0
-post_upload_command     = ssh rosbuild@50.28.27.175 -- /usr/bin/reprepro -b /var/www/repos/building --ignore=emptyfilenamepart -V processincoming all
+post_upload_command     = ssh rosbuild@jenkins.willowgarage.com -- /usr/bin/reprepro -b /var/www/repos/building --ignore=emptyfilenamepart -V processincoming all
 
 
 [all-shadow]

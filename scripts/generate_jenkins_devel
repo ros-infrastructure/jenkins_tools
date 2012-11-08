@@ -26,11 +26,11 @@ def main():
         print "Usage: %s ros_distro"%(sys.argv[0])
         sys.exit(0)
     ros_distro = args[0]
-    
-    # create jenkins instance 
+
+    # create jenkins instance
     with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
         info = yaml.load(f)
-    jenkins_instance = jenkins.Jenkins('http://50.28.61.61:8080/', info['username'], info['password'])
+    jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
 
     # parse the devel distro file
     print "Parsing devel yaml file for %s"%ros_distro
@@ -46,7 +46,7 @@ def main():
                     conf['version'] = ''
                 if not conf['version']:
                     conf['version'] = ''
-                job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance, u, a, ros_distro+'-'+s, 'wim@hidof.com', 
+                job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance, u, a, ros_distro+'-'+s, 'wim@hidof.com',
                                                          conf['type'], conf['url'], conf['version'],
                                                          'devel', [ros_distro, s], info['username'])
                 devel_jobs.append(job_name)
@@ -56,7 +56,7 @@ def main():
     if options.run:
         for d in devel_jobs:
             jenkins_instance.build_job(d)
-            print "Started job %s"%d            
+            print "Started job %s"%d
 
 
     # delete old jobs

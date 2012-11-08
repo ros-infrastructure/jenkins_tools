@@ -34,16 +34,16 @@ def main():
     if len(name) > 50:
         name = name[:48]+"..."
     script_args = [ros_distro] + script_args
-    
-    # create jenkins instance 
+
+    # create jenkins instance
     with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
         info = yaml.load(f)
-    jenkins_instance = jenkins.Jenkins('http://50.28.61.61:8080/', info['username'], info['password'])
+    jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
 
     # create all jobs
     for ubuntu in ubuntus[ros_distro]:
         for arch in archs:
-            job_name = jenkins_tools.run_jenkins_now(jenkins_instance, ubuntu, arch, name, email, 
+            job_name = jenkins_tools.run_jenkins_now(jenkins_instance, ubuntu, arch, name, email,
                                                      'prerelease', script_args, info['username'])
             jenkins_instance.build_job(job_name)
             print "----"
