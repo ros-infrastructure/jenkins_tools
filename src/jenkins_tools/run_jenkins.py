@@ -97,7 +97,7 @@ def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email,
         job_xml = job_xml.replace("@(%s)"%key, value)
 
     # schedule a new job
-    job_name = "%s-%s-%s-%s"%(params['SCRIPT'], name, params['UBUNTU_DISTRO'], params['ARCH'])
+    job_name = "%s-%s"%(params['SCRIPT'], name)
     if jenkins_instance.job_exists(job_name):
         jenkins_instance.reconfig_job(job_name, job_xml)
         print "Reconfigured job %s"%job_name
@@ -139,7 +139,7 @@ def run_jenkins_vcs(jenkins_instance,
         job_xml = job_xml.replace("@(%s)"%key, value)
 
     # schedule a new job
-    job_name = "%s-%s-%s-%s"%(params['SCRIPT'], name, params['UBUNTU_DISTRO'], params['ARCH'])
+    job_name = "%s-%s"%(params['SCRIPT'], name)
     if jenkins_instance.job_exists(job_name):
         jenkins_instance.reconfig_job(job_name, job_xml)
         print "Reconfigured job %s"%job_name
