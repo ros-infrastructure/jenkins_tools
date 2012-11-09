@@ -65,13 +65,11 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, 
     # build all jobs
     if not parameters or len(parameters) == 0:
         jenkins_instance.build_job(job_name)
-        print "Started job %s"%job_name
     else:
         for p in parameters:
             jenkins_instance.build_job(job_name, p)
-            print "Started job %s with parameters %s"%(job_name, str(p))
+    print "Started job %s"%job_name
 
-    print "When the job finishes, you will receive an email at %s"%params['EMAIL']
     return job_name
 
 

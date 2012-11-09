@@ -43,7 +43,7 @@ def main():
                                              [{'EMAIL_PARAM': email}],
                                              {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64', 'i386']})
     jenkins_instance.build_job(job_name)
-    print "View the job's progress on <http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s>"%job_name
+    print "View the job's progress on the <a href='http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s'>Jenkins server</a>"%job_name
 
 if __name__ == "__main__":
     main()
