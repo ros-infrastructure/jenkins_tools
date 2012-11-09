@@ -12,11 +12,10 @@ import jenkins_tools
 
 ubuntu = ['precise']
 arch = ['amd64', 'i386']
-param_names = ['UBUNTU_PARAM', 'ARCH_PARAM']
-param_values = []
+parameters = []
 for u in ubuntu:
     for a in arch:
-        param_values.append({'UBUNTU_PARAM': u, 'ARCH_PARAM': a})
+        parameters.append({'UBUNTU_PARAM': u, 'ARCH_PARAM': a})
 
 # Schedule all devel jobs on Jenkins
 def main():
@@ -45,8 +44,7 @@ def main():
 
     # create all jobs
     job_name = jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', name, email,
-                                             'prerelease', script_args, info['username'],
-                                             param_names, param_values)
+                                             'prerelease', script_args, info['username'], parameters)
     jenkins_instance.build_job(job_name)
 
 if __name__ == "__main__":
