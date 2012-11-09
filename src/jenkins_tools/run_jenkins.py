@@ -15,7 +15,7 @@ JENKINS_SERVER = 'http://jenkins.willowgarage.com:8080/'
 
 
 # Schedule a set of jobs in Jenkins
-def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, script_args, user_name, parameters=None):
+def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, script_args, user_name, parameters=None, matrix=None):
 
     job_xml = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_template.xml')
     jenkins_conf = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_conf.yaml')
@@ -36,12 +36,22 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, 
     params['USERNAME'] = user_name
     params['HOSTNAME'] = os.uname()[1]
     params['PARAMETERS'] = ''
+    params['MATRIX'] = ''
+    params['PROJECT'] = 'project'
     if parameters and len(parameters) > 0:
-        params['PARAMETERS'] = jc['params'].replace('@(PARAMS)', ' '.join([jc['add_param'].replace('@(PARAM)', p) for p in parameters[0].keys()]))
+        params['PARAMETERS'] = jc['parameters']['block'].replace('@(PARAMS)', ' '.join([jc['parameters']['param'].replace('@(PARAM)', p) for p in parameters[0].keys()]))
+    if matrix:
+        axis = ''
+        for axis_name, axis_values in matrix.iteritems():
+            axis += jc['matrix']['axis'].replace('@(NAME)', axis_name).replace('@(VALUES)', ' '.join([ jc['matrix']['value'].replace('@(VALUE)', v) for v in axis_values]))
+        params['MATRIX'] = jc['matrix']['block'].replace('@(AXIS)', axis)
+        params['MATRIX'] = params['MATRIX'].replace('@(NODE)', params['NODE'])
+        params['PROJECT'] = 'matrix-project'
 
     # replace @(xxx) in template file
     for key, value in params.iteritems():
         job_xml = job_xml.replace("@(%s)"%key, value)
+
 
     # schedule a new job
     job_name = "%s-%s"%(params['SCRIPT'], name)
@@ -91,6 +101,8 @@ def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email,
     params['USERNAME'] = user_name
     params['HOSTNAME'] = os.uname()[1]
     params['PARAMETERS'] = ''
+    params['MATRIX'] = ''
+    params['PROJECT'] = 'project'
 
     # replace @(xxx) in template file
     for key, value in params.iteritems():
@@ -133,6 +145,8 @@ def run_jenkins_vcs(jenkins_instance,
     params['USERNAME'] = user_name
     params['HOSTNAME'] = os.uname()[1]
     params['PARAMETERS'] = ''
+    params['MATRIX'] = ''
+    params['PROJECT'] = 'project'
 
     # replace @(xxx) in template file
     for key, value in params.iteritems():

@@ -14,6 +14,11 @@
 </scm>'
   'git': '<scm class="hudson.plugins.git.GitSCM"><configVersion>2</configVersion><userRemoteConfigs><hudson.plugins.git.UserRemoteConfig><name>origin</name><refspec>+refs/heads/*:refs/remotes/origin/*</refspec><url>@(URI)</url></hudson.plugins.git.UserRemoteConfig></userRemoteConfigs><branches><hudson.plugins.git.BranchSpec><name>@(BRANCH)</name></hudson.plugins.git.BranchSpec></branches><disableSubmodules>false</disableSubmodules><recursiveSubmodules>true</recursiveSubmodules><doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations><authorOrCommitter>false</authorOrCommitter><clean>false</clean><wipeOutWorkspace>false</wipeOutWorkspace><pruneBranches>false</pruneBranches><remotePoll>false</remotePoll><ignoreNotifyCommit>false</ignoreNotifyCommit><buildChooser class="hudson.plugins.git.util.DefaultBuildChooser"/><gitTool>Default</gitTool><submoduleCfg class="list"/><relativeTargetDir>monitored_vcs</relativeTargetDir><reference/><excludedRegions/><excludedUsers/><gitConfigName/><gitConfigEmail/><skipTag>false</skipTag><includedRegions/><scmName/></scm>'
 
-'params': '<hudson.model.ParametersDefinitionProperty> <parameterDefinitions> @(PARAMS) </parameterDefinitions> </hudson.model.ParametersDefinitionProperty>'
-'add_param': '<hudson.model.StringParameterDefinition> <name>@(PARAM)</name> <description></description> <defaultValue></defaultValue>  </hudson.model.StringParameterDefinition>'
+'parameters':
+  'block': '<hudson.model.ParametersDefinitionProperty> <parameterDefinitions> @(PARAMS) </parameterDefinitions> </hudson.model.ParametersDefinitionProperty>'
+  'param': '<hudson.model.StringParameterDefinition> <name>@(PARAM)</name> <description></description> <defaultValue></defaultValue>  </hudson.model.StringParameterDefinition>'
 
+'matrix':
+  'block': '<axes>@(AXIS)<hudson.matrix.LabelAxis><name>label</name><values><string>@(NODE)</string></values></hudson.matrix.LabelAxis></axes><executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl"><runSequentially>false</runSequentially></executionStrategy>'
+  'axis': '<hudson.matrix.TextAxis><name>@(NAME)</name><values>@(VALUES)</values></hudson.matrix.TextAxis>'
+  'value': '<string>@(VALUE)</string>'
