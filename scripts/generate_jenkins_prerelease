@@ -10,7 +10,7 @@ from rospkg import environment
 import optparse
 import jenkins_tools
 
-matrix = {'UBUNTU_PARAM': ['precise', 'oneiric'],
+matrix = {'UBUNTU_PARAM': ['precise'],
           'ARCH_PARAM': ['amd64', 'i386']}
 
 # Schedule all devel jobs on Jenkins
