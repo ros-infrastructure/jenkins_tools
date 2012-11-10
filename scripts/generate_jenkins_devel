@@ -40,18 +40,16 @@ def main():
     # create all jobs
     devel_jobs = []
     for s, conf in devel.iteritems():
-        for u in ubuntu_distro[ros_distro]:
-            for a in arch:
-                name = "%s-%s-%s-%s"%(ros_distro, s, u, a)
-                if conf['type'] == 'svn':
-                    conf['version'] = ''
-                if not conf['version']:
-                    conf['version'] = ''
-                job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance, u, a, name, 'wim@hidof.com',
-                                                         conf['type'], conf['url'], conf['version'],
-                                                         'devel', [ros_distro, s], info['username'])
-                devel_jobs.append(job_name)
-
+        name = "%s-%s"%(ros_distro, s)
+        if conf['type'] == 'svn':
+            conf['version'] = ''
+        if not conf['version']:
+            conf['version'] = ''
+        job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', name, 'wim@hidof.com',
+                                                 conf['type'], conf['url'], conf['version'],
+                                                 'devel', [ros_distro, s], info['username'],
+                                                 {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64', 'i386']})
+        devel_jobs.append(job_name)
 
     # run jobs right now
     if options.run:

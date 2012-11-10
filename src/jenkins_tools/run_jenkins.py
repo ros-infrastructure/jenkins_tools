@@ -78,7 +78,7 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, name, email, script, 
 
 # Schedule a set of jobs in Jenkins
 def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email,
-                         period, script, script_args, user_name):
+                         period, script, script_args, user_name, matrix=None):
 
     job_xml = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_template.xml')
     jenkins_conf = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_conf.yaml')
@@ -101,6 +101,14 @@ def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email,
     params['PARAMETERS'] = ''
     params['MATRIX'] = ''
     params['PROJECT'] = 'project'
+    params['MATRIX'] = ''
+    if matrix:
+        axis = ''
+        for axis_name, axis_values in matrix.iteritems():
+            axis += jc['matrix']['axis'].replace('@(NAME)', axis_name).replace('@(VALUES)', ' '.join([ jc['matrix']['value'].replace('@(VALUE)', v) for v in axis_values]))
+        params['MATRIX'] = jc['matrix']['block'].replace('@(AXIS)', axis)
+        params['MATRIX'] = params['MATRIX'].replace('@(NODE)', params['NODE'])
+        params['PROJECT'] = 'matrix-project'
 
     # replace @(xxx) in template file
     for key, value in params.iteritems():
@@ -122,7 +130,7 @@ def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, name, email,
 # Schedule a set of jobs in Jenkins
 def run_jenkins_vcs(jenkins_instance,
                     ubuntu_distro, arch, name, email, vcs, uri, branch,
-                    script, script_args, user_name):
+                    script, script_args, user_name, matrix=None):
 
     job_xml = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_template.xml')
     jenkins_conf = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_conf.yaml')
@@ -145,6 +153,14 @@ def run_jenkins_vcs(jenkins_instance,
     params['PARAMETERS'] = ''
     params['MATRIX'] = ''
     params['PROJECT'] = 'project'
+    params['MATRIX'] = ''
+    if matrix:
+        axis = ''
+        for axis_name, axis_values in matrix.iteritems():
+            axis += jc['matrix']['axis'].replace('@(NAME)', axis_name).replace('@(VALUES)', ' '.join([ jc['matrix']['value'].replace('@(VALUE)', v) for v in axis_values]))
+        params['MATRIX'] = jc['matrix']['block'].replace('@(AXIS)', axis)
+        params['MATRIX'] = params['MATRIX'].replace('@(NODE)', params['NODE'])
+        params['PROJECT'] = 'matrix-project'
 
     # replace @(xxx) in template file
     for key, value in params.iteritems():
