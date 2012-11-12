@@ -44,7 +44,7 @@ def main():
     for r, p, v in zip(repo_names, param_names, repo_versions):
         parameters[0][p] = v
         script_args.append(r)
-        script_args.append(p)
+        script_args.append('$'+p)
 
     # create all jobs
     jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', job_name, '$EMAIL_PARAM',
