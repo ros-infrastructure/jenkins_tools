@@ -17,7 +17,7 @@ def main():
     parser.add_option("--name", action="store", default=None)
     (options, args) = parser.parse_args()
     if len(args) <= 3 or len(args)%2 != 0:
-        print "Usage: %s email ros_distro [distro version]"%(sys.argv[0])
+        print "Usage: %s email ros_distro [repository version]"%(sys.argv[0])
         sys.exit(0)
 
     email = args[0]
