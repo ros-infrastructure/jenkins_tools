@@ -41,10 +41,10 @@ def main():
     script_args = [ros_distro]
     param_names = [n+"_VERSION" for n in repo_names]
     parameters =  [{'EMAIL_PARAM': email}]
-    for p, v in zip(param_names, repo_versions):
+    for r, p, v in zip(repo_names, param_names, repo_versions):
         parameters[0][p] = v
+        script_args.append(r)
         script_args.append(p)
-        script_args.append(v)
 
     # create all jobs
     jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', job_name, '$EMAIL_PARAM',
