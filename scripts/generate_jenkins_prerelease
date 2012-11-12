@@ -22,28 +22,40 @@ def main():
 
     email = args[0]
     ros_distro = args[1]
-    script_args = args[2:]
+    repo_names    = [args[2:][i]   for i in range(0, len(args[2:]), 2)]
+    repo_versions = [args[2:][i+1] for i in range(0, len(args[2:]), 2)]
 
-    name = '-'.join(script_args)
-    name = ros_distro+"-"+name
-    if options.name:
-        name = options.name + "-" + name
-    if len(name) > 50:
-        name = name[:48]+"..."
-    script_args = [ros_distro] + script_args
+    # generate job name
+    job_name = 'prerelease-' + ros_distro + '-' + '-'.join(repo_names)
+    if options.name:      # add user defined prefix
+        job_name = options.name + "-" + job_name
+    if len(job_name) > 50:    # limit length of job name
+        job_name = job_name[:48]+"..."
 
     # create jenkins instance
     with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
         info = yaml.load(f)
     jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
 
+    # parameters
+    script_args = [ros_distro]
+    param_names = [n+"_VERSION" for n in repo_names]
+    parameters =  [{'EMAIL_PARAM': email}]
+    for p, v in zip(param_names, repo_versions):
+        parameters[0][p] = v
+        script_args.append(p)
+        script_args.append(v)
+
     # create all jobs
-    job_name = jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', name, '$EMAIL_PARAM',
-                                             'prerelease', script_args, info['username'],
-                                             [{'EMAIL_PARAM': email}],
-                                             {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64', 'i386']})
+    jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', job_name, '$EMAIL_PARAM',
+                                  'prerelease',  # script to run
+                                  script_args, # script arguments
+                                  info['username'], # user name
+                                  parameters, # parameters
+                                  {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64', 'i386']})  # matrix
     jenkins_instance.build_job(job_name)
-    print "View the job's progress on the <a href='http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s'>Jenkins server</a>"%job_name
+    print "View the job's progress on <http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s>"%job_name
+
 
 if __name__ == "__main__":
     main()

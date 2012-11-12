@@ -14,26 +14,25 @@ from rospkg import environment
 
 def main():
     if len(sys.argv) < 8:
-        print "Usage: %s ubuntu_distro arch job_name email {svn/git/hg} uri branch script [script_args]"%(sys.argv[0])
+        print "Usage: %s ubuntu_distro arch email {svn/git/hg} uri branch script [script_args]"%(sys.argv[0])
         sys.exit(0)
 
     ubuntu_distro = sys.argv[1]
     arch = sys.argv[2]
-    name = sys.argv[3]
-    email = sys.argv[4]
-    vcs = sys.argv[5]
-    uri = sys.argv[6]
-    branch = sys.argv[7]
-    script = sys.argv[8]
-    script_args = sys.argv[9:]
-
+    email = sys.argv[3]
+    vcs = sys.argv[4]
+    uri = sys.argv[5]
+    branch = sys.argv[6]
+    script = sys.argv[7]
+    script_args = sys.argv[8:]
+    job_name = script + '-' + '-'.join(script_args) + '-' + ubuntu_distro + '-' + arch
 
     # run job
     with open(os.path.join(environment.get_ros_home(), 'catkin-debs', 'server.yaml')) as f:
         info = yaml.load(f)
-    jenkins_instance = jenkins.Jenkins(jenkins_tools.jenkins_server, info['username'], info['password'])
-    job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance, 
-                                             ubuntu_distro, arch, name, email, vcs, uri, branch,
+    jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
+    job_name = jenkins_tools.run_jenkins_vcs(jenkins_instance,
+                                             ubuntu_distro, arch, job_name, email, vcs, uri, branch,
                                              script, script_args, info['username'])
 
 

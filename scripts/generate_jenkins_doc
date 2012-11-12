@@ -61,7 +61,8 @@ def main():
 
         for u in ubuntu_distro[ros_distro]:
             for a in arch:
-                job_name = jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, ros_distro+'-'+s, "eitan@hidof.com", "nightly", "doc", [ros_distro, s], info['username'])
+                job_name = 'doc-' + ros_distro + '-' + s
+                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "eitan@hidof.com", "nightly", "doc", [ros_distro, s], info['username'])
                 if options.run:
                     print "Running %s" % job_name
                     jenkins_instance.build_job(job_name)
