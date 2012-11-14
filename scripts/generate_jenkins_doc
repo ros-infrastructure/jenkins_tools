@@ -12,7 +12,8 @@ import jenkins_tools
 import tempfile
 import shutil
 
-ubuntu_distro = {'fuerte': ['precise'],
+ubuntu_distro = {'electric': ['lucid'],
+                 'fuerte': ['precise'],
                  'groovy': ['precise']}
 arch = ['amd64']
 
