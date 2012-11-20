@@ -52,7 +52,7 @@ def main():
                                   script_args, # script arguments
                                   info['username'], # user name
                                   parameters, # parameters
-                                  {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64', 'i386']})  # matrix
+                                  {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']})  # matrix
     jenkins_instance.build_job(job_name)
     print "View the job's progress on <http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s>"%job_name
 
