@@ -4,7 +4,7 @@ set -ex
 # pass all arguments to the dispatcher on to the script we're running
 SCRIPT_ARGS=""
 for i in $*
-  do 
+do 
   SCRIPT_ARGS=`echo $SCRIPT_ARGS $i`
 done
 echo "Arguments for script: " $SCRIPT_ARGS
@@ -12,6 +12,12 @@ echo "Arguments for script: " $SCRIPT_ARGS
 #always ask for pbuilder to make sure we have the updated patched version
 #sudo apt-get update  --> this is done in the Jenkins script, right before dispatch is called
 sudo apt-get -y install pbuilder
+
+#  If a specific repository URL has been specified via environment variables
+#  use that, otherwise use the defaults
+if [ -z "${JENKINS_SCRIPTS_REPOSITORY_URL}" ] ; then
+  export JENKINS_SCRIPTS_REPOSITORY_URL="http://github.com/ros-infrastructure/jenkins_scripts.git"
+fi
 
 #  get latest version of jenkins scripts
 cd $WORKSPACE
@@ -24,8 +30,12 @@ if [ -e $WORKSPACE/run_debug_mode ] ; then
   /bin/echo "DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG DEBUG  DEBUG "
 else
   rm -rf jenkins_scripts
-  git clone http://github.com/ros-infrastructure/jenkins_scripts.git
-  cd jenkins_scripts && git log -n 1
+  git clone ${JENKINS_SCRIPTS_REPOSITORY_URL}
+  cd jenkins_scripts
+  if [ -n "${JENKINS_SCRIPTS_REPOSITORY_BRANCH}" ] ; then
+    git checkout ${JENKINS_SCRIPTS_REPOSITORY_BRANCH} 
+  fi
+  git log -n 1
 fi
 
 cd $WORKSPACE
