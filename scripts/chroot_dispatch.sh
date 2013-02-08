@@ -95,7 +95,7 @@ rm -rf $tmpdir
 
 sudo pbuilder execute \
     --basetgz $basetgz \
-    --bindmounts "/var/cache/pbuilder/ccache $WORKSPACE $HOME/.ssh" \
+    --bindmounts "/var/cache/pbuilder/ccache $WORKSPACE $HOME" \
     --inputfile $WORKSPACE/jenkins_scripts/$SCRIPT \
     -- $WORKSPACE/pbuilder-env.sh $SCRIPT
 
