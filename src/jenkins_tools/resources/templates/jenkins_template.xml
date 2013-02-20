@@ -34,7 +34,7 @@ bash run_chroot_local @(UBUNTU_DISTRO) @(ARCH) $WORKSPACE @(SCRIPT) @(SCRIPT_ARG
   </builders>
   <publishers>
     <hudson.tasks.junit.JUnitResultArchiver>
-      <testResults>test_results/*.xml</testResults>
+      <testResults>test_results/**/*.xml</testResults>
       <keepLongStdio>false</keepLongStdio>
       <testDataPublishers/>
     </hudson.tasks.junit.JUnitResultArchiver>
