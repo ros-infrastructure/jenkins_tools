@@ -21,7 +21,7 @@ def build_job(jenkins_instance, job_name, parameters=None):
     if not jenkins_instance.job_exists(job_name):
         raise jenkins.JenkinsException('no such job[%s]' % (job_name))
     # pass parameters to create a POST request instead of GET
-    return jenkins_instance.jenkins_open(urllib2.Request(jenkins_instance.build_job_url(job_name, parameters), [('foo', 'bar')]))
+    return jenkins_instance.jenkins_open(urllib2.Request(jenkins_instance.build_job_url(job_name, parameters), 'foo=bar'))
 
 
 # Schedule a set of jobs in Jenkins
