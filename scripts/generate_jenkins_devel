@@ -15,6 +15,16 @@ ubuntu_distro = {'fuerte': ['precise'],
 arch = ['amd64']
 
 
+def build_job(jenkins_instance, job_name):
+    #return jenkins_instance.build_job(job_name)
+    # replicate internal implementation of Jenkins.build_job()
+    import urllib2
+    if not jenkins_instance.job_exists(job_name):
+        raise jenkins.JenkinsException('no such job[%s]' % (job_name))
+    # pass parameters to create a POST request instead of GET
+    return jenkins_instance.jenkins_open(urllib2.Request(jenkins_instance.build_job_url(job_name), [('foo', 'bar')]))
+
+
 # Schedule all devel jobs on Jenkins
 def main():
     parser = optparse.OptionParser()
@@ -55,7 +65,7 @@ def main():
     # run jobs right now
     if options.run:
         for d in devel_jobs:
-            jenkins_instance.build_job(d)
+            build_job(jenkins_instance, d)
             print "Started job %s"%d
 
 

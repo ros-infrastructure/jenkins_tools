@@ -11,6 +11,16 @@ import optparse
 import jenkins_tools
 
 
+def build_job(jenkins_instance, job_name):
+    #return jenkins_instance.build_job(job_name)
+    # replicate internal implementation of Jenkins.build_job()
+    import urllib2
+    if not jenkins_instance.job_exists(job_name):
+        raise jenkins.JenkinsException('no such job[%s]' % (job_name))
+    # pass parameters to create a POST request instead of GET
+    return jenkins_instance.jenkins_open(urllib2.Request(jenkins_instance.build_job_url(job_name), [('foo', 'bar')]))
+
+
 # Schedule all devel jobs on Jenkins
 def main():
     parser = optparse.OptionParser()
@@ -53,7 +63,7 @@ def main():
                                   info['username'], # user name
                                   parameters, # parameters
                                   {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']})  # matrix
-    jenkins_instance.build_job(job_name)
+    build_job(jenkins_instance, job_name)
     print "View the job's progress on <http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s>"%job_name
 
 

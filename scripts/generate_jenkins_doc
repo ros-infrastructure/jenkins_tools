@@ -17,6 +17,15 @@ ubuntu_distro = {'electric': ['lucid'],
                  'groovy': ['precise']}
 arch = ['amd64']
 
+def build_job(jenkins_instance, job_name):
+    #return jenkins_instance.build_job(job_name)
+    # replicate internal implementation of Jenkins.build_job()
+    import urllib2
+    if not jenkins_instance.job_exists(job_name):
+        raise jenkins.JenkinsException('no such job[%s]' % (job_name))
+    # pass parameters to create a POST request instead of GET
+    return jenkins_instance.jenkins_open(urllib2.Request(jenkins_instance.build_job_url(job_name), [('foo', 'bar')]))
+
 def get_distro_rosinstalls(distro):
     temp_dir = tempfile.mkdtemp()
     helper = subprocess.Popen(["git", "clone", "git://github.com/ros/rosdistro.git", temp_dir])
@@ -66,7 +75,7 @@ def main():
                 jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "eitan@hidof.com", "nightly", "doc", [ros_distro, s], info['username'])
                 if options.run:
                     print "Running %s" % job_name
-                    jenkins_instance.build_job(job_name)
+                    build_job(jenkins_instance, job_name)
                 print "\n"
                 doc_jobs.append(job_name)
 

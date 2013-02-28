@@ -14,6 +14,16 @@ from rospkg import environment
 JENKINS_SERVER = 'http://jenkins.willowgarage.com:8080/'
 
 
+def build_job(jenkins_instance, job_name, parameters=None):
+    #return jenkins_instance.build_job(job_name)
+    # replicate internal implementation of Jenkins.build_job()
+    import urllib2
+    if not jenkins_instance.job_exists(job_name):
+        raise jenkins.JenkinsException('no such job[%s]' % (job_name))
+    # pass parameters to create a POST request instead of GET
+    return jenkins_instance.jenkins_open(urllib2.Request(jenkins_instance.build_job_url(job_name, parameters), [('foo', 'bar')]))
+
+
 # Schedule a set of jobs in Jenkins
 def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, job_name, email, script, script_args, user_name, parameters=None, matrix=None):
 
@@ -63,10 +73,10 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, job_name, email, scri
 
     # build all jobs
     if not parameters or len(parameters) == 0:
-        jenkins_instance.build_job(job_name)
+        build_job(jenkins_instance, job_name)
     else:
         for p in parameters:
-            jenkins_instance.build_job(job_name, p)
+            build_job(jenkins_instance, job_name, p)
     print "Started job %s"%job_name
 
 
