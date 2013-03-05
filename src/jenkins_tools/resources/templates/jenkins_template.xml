@@ -12,9 +12,6 @@
   @(MATRIX)
   <properties>
     @(PARAMETERS)
-    <hudson.plugins.trac.TracProjectProperty>
-      <tracWebsite>http://code.ros.org/trac/ros/</tracWebsite>
-    </hudson.plugins.trac.TracProjectProperty>
   </properties>
   @(VCS)
   <assignedNode>@(NODE)</assignedNode>
