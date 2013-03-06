@@ -29,7 +29,7 @@ def _get_jenkins_conf():
     return yaml.load(jenkins_conf)
 
 
-def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job_name, email, script, script_args, user_name, custom_params=None, parameters=None, matrix=None):
+def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job_name, email, script, script_args, user_name, custom_params=None, parameters=None, matrix=None, priority=None):
     job_xml = pkg_resources.resource_string('jenkins_tools', 'resources/templates/jenkins_template.xml')
 
     params = {}
@@ -51,6 +51,8 @@ def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job
 
     params['TRIGGER'] = jenkins_conf['triggers']['none']
     params['VCS'] = jenkins_conf['vcs']['none']
+
+    params['PRIORITY'] = str(priority) if priority else '100'  # 100 minutes is the default priority
 
     if parameters:
         params['PARAMETERS'] = jenkins_conf['parameters']['block'].replace('@(PARAMS)', ' '.join([jenkins_conf['parameters']['param'].replace('@(PARAM)', p) for p in parameters[0].keys()]))
@@ -97,19 +99,19 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, job_name, email, scri
 
 
 # configure a job with periodic trigger
-def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, job_name, email, period, script, script_args, user_name, matrix=None):
+def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, job_name, email, period, script, script_args, user_name, matrix=None, priority=None):
     jc = _get_jenkins_conf()
     params = {}
     params['EMAIL_COMMITTER'] = 'false'
     params['TRIGGER'] = jc['triggers']['periodic'][period]
-    _update_jenkins_job(jenkins_instance, jc, ubuntu_distro, arch, job_name, email, script, script_args, user_name, params, matrix=matrix)
+    _update_jenkins_job(jenkins_instance, jc, ubuntu_distro, arch, job_name, email, script, script_args, user_name, params, matrix=matrix, priority=priority)
 
 
 # configure a job with vcs trigger
-def run_jenkins_vcs(jenkins_instance, ubuntu_distro, arch, job_name, email, vcs, uri, branch, script, script_args, user_name, matrix=None):
+def run_jenkins_vcs(jenkins_instance, ubuntu_distro, arch, job_name, email, vcs, uri, branch, script, script_args, user_name, matrix=None, priority=None):
     jc = _get_jenkins_conf()
     params = {}
     params['EMAIL_COMMITTER'] = 'true'
     params['TRIGGER'] = jc['triggers']['vcs']
     params['VCS'] = jc['vcs'][vcs].replace('@(URI)', uri).replace('@(BRANCH)', branch)
-    _update_jenkins_job(jenkins_instance, jc, ubuntu_distro, arch, job_name, email, script, script_args, user_name, params, matrix=matrix)
+    _update_jenkins_job(jenkins_instance, jc, ubuntu_distro, arch, job_name, email, script, script_args, user_name, params, matrix=matrix, priority=priority)

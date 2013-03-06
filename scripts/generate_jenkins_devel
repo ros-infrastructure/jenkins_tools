@@ -59,7 +59,7 @@ def main():
                                       job_name, 'wim@hidof.com',
                                       conf['type'], conf['url'], conf['version'],
                                       'devel', [ros_distro, s], info['username'],
-                                      {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']})
+                                      {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']}, priority=150)
         devel_jobs.append(job_name)
 
     # run jobs right now

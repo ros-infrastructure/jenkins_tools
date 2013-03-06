@@ -12,6 +12,9 @@
   @(MATRIX)
   <properties>
     @(PARAMETERS)
+    <hudson.queueSorter.PrioritySorterJobProperty>
+      <priority>@(PRIORITY)</priority>
+    </hudson.queueSorter.PrioritySorterJobProperty>
   </properties>
   @(VCS)
   <assignedNode>@(NODE)</assignedNode>
