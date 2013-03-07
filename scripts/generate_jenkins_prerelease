@@ -57,7 +57,7 @@ def main():
         script_args.append('$'+p)
 
     # create all jobs
-    jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', job_name, '$EMAIL_PARAM',
+    jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', job_name, 'ros-buildfarm-prerelease@googlegroups.com $EMAIL_PARAM',
                                   'prerelease',  # script to run
                                   script_args, # script arguments
                                   info['username'], # user name

@@ -56,7 +56,7 @@ def main():
         if not conf['version']:
             conf['version'] = ''
         jenkins_tools.run_jenkins_vcs(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM',
-                                      job_name, 'wim@hidof.com',
+                                      job_name, 'ros-buildfarm-devel@googlegroups.com',
                                       conf['type'], conf['url'], conf['version'],
                                       'devel', [ros_distro, s], info['username'],
                                       {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']}, priority=150)
