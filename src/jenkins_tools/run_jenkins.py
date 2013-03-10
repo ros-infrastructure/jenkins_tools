@@ -73,8 +73,6 @@ def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job
         job_xml = job_xml.replace("@(%s)" % key, value)
 
     # (re-)configure job
-    with open('/tmp/workspace/gen_jobs/%s.xml' % job_name, 'w') as f:
-        f.write(job_xml)
     if jenkins_instance.job_exists(job_name):
         jenkins_instance.reconfig_job(job_name, job_xml)
         print "Reconfigured job %s" % job_name
