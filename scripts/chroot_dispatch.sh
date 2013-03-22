@@ -9,10 +9,6 @@ do
 done
 echo "Arguments for script: " $SCRIPT_ARGS
 
-#always ask for pbuilder to make sure we have the updated patched version
-#sudo apt-get update  --> this is done in the Jenkins script, right before dispatch is called
-sudo apt-get -y install pbuilder
-
 #  If a specific repository URL has been specified via environment variables
 #  use that, otherwise use the defaults
 if [ -z "${JENKINS_SCRIPTS_REPOSITORY_URL}" ] ; then
