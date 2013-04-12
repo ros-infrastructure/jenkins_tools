@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 
-import sys
 import jenkins
-import urllib
-import yaml
-import subprocess
-import os
-from rospkg import environment
 import optparse
+import os
+import sys
+import yaml
+
 import jenkins_tools
+from rospkg import environment
 
 
 def build_job(jenkins_instance, job_name):
@@ -26,21 +25,21 @@ def main():
     parser = optparse.OptionParser()
     parser.add_option("--name", action="store", default=None)
     (options, args) = parser.parse_args()
-    if len(args) <= 3 or len(args)%2 != 0:
-        print "Usage: %s email ros_distro [repository version]"%(sys.argv[0])
+    if len(args) <= 3 or len(args) % 2 != 0:
+        print "Usage: %s email ros_distro [repository version]" % (sys.argv[0])
         sys.exit(0)
 
     email = args[0]
     ros_distro = args[1]
-    repo_names    = [args[2:][i]   for i in range(0, len(args[2:]), 2)]
-    repo_versions = [args[2:][i+1] for i in range(0, len(args[2:]), 2)]
+    repo_names = [args[2:][i] for i in range(0, len(args[2:]), 2)]
+    repo_versions = [args[2:][i + 1] for i in range(0, len(args[2:]), 2)]
 
     # generate job name
     job_name = 'prerelease-' + ros_distro + '-' + '-'.join(repo_names)
     if options.name:      # add user defined prefix
         job_name = options.name + "-" + job_name
     if len(job_name) > 50:    # limit length of job name
-        job_name = job_name[:48]+"..."
+        job_name = job_name[:48] + "..."
 
     # create jenkins instance
     with open(os.path.join(environment.get_ros_home(), 'buildfarm', 'server.yaml')) as f:
@@ -49,22 +48,22 @@ def main():
 
     # parameters
     script_args = [ros_distro]
-    param_names = [n+"_VERSION" for n in repo_names]
-    parameters =  [{'EMAIL_PARAM': email}]
+    param_names = [n + "_VERSION" for n in repo_names]
+    parameters = [{'EMAIL_PARAM': email}]
     for r, p, v in zip(repo_names, param_names, repo_versions):
         parameters[0][p] = v
         script_args.append(r)
-        script_args.append('$'+p)
+        script_args.append('$' + p)
 
     # create all jobs
     jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', job_name, 'ros-buildfarm-prerelease@googlegroups.com $EMAIL_PARAM',
                                   'prerelease',  # script to run
-                                  script_args, # script arguments
-                                  info['username'], # user name
-                                  parameters, # parameters
+                                  script_args,  # script arguments
+                                  info['username'],  # user name
+                                  parameters,  # parameters
                                   {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']})  # matrix
     build_job(jenkins_instance, job_name)
-    print "View the job's progress on <http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s>"%job_name
+    print "View the job's progress on <http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s>" % job_name
 
 
 if __name__ == "__main__":

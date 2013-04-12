@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
-import sys
 import jenkins
-import urllib
-import yaml
-import subprocess
 import optparse
 import os
-from rospkg import environment
+import sys
+import urllib
+import yaml
+
 import jenkins_tools
+from rospkg import environment
 
 ubuntu_distro = {'fuerte': ['precise'],
                  'groovy': ['precise'],
@@ -34,7 +34,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if len(args) != 1:
-        print "Usage: %s ros_distro"%(sys.argv[0])
+        print "Usage: %s ros_distro" % (sys.argv[0])
         sys.exit(0)
     ros_distro = args[0]
 
@@ -44,14 +44,14 @@ def main():
     jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
 
     # parse the devel distro file
-    print "Parsing devel yaml file for %s"%ros_distro
-    f = urllib.urlopen('https://raw.github.com/ros/rosdistro/master/releases/%s-devel.yaml'%ros_distro)
+    print "Parsing devel yaml file for %s" % ros_distro
+    f = urllib.urlopen('https://raw.github.com/ros/rosdistro/master/releases/%s-devel.yaml' % ros_distro)
     devel = yaml.load(f.read())['repositories']
 
     # create all jobs
     devel_jobs = []
     for s, conf in devel.iteritems():
-        job_name = "devel-%s-%s"%(ros_distro, s)
+        job_name = "devel-%s-%s" % (ros_distro, s)
         if conf['type'] == 'svn':
             conf['version'] = ''
         if not conf['version']:
@@ -67,20 +67,19 @@ def main():
     if options.run:
         for d in devel_jobs:
             build_job(jenkins_instance, d)
-            print "Started job %s"%d
-
+            print "Started job %s" % d
 
     # delete old jobs
     if options.delete:
         remove = []
         current_jobs = [j['name'] for j in jenkins_instance.get_jobs()]
         for c in current_jobs:
-            if 'devel-%s-'%ros_distro in c and not c in devel_jobs:
+            if 'devel-%s-' % ros_distro in c and not c in devel_jobs:
                 remove.append(c)
 
         for r in remove:
             jenkins_instance.delete_job(r)
-            print "Deleted old job %s"%r
+            print "Deleted old job %s" % r
 
 
 if __name__ == "__main__":

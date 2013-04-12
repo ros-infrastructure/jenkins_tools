@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 
-import sys
 import jenkins
-import urllib
-import yaml
-import datetime
 import os
+import sys
+import yaml
+
 import jenkins_tools
 from rospkg import environment
 
 
-
-
 def main():
     if len(sys.argv) < 7:
-        print "Usage: %s ubuntu_distro arch email {continuous/nightly/daily/weekly/monthly} script [script_args]"%(sys.argv[0])
+        print "Usage: %s ubuntu_distro arch email {continuous/nightly/daily/weekly/monthly} script [script_args]" % (sys.argv[0])
         sys.exit(0)
 
     ubuntu_distro = sys.argv[1]
@@ -31,8 +28,6 @@ def main():
     jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
     job_name = jenkins_tools.run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, job_name, email,
                                                   period, script, script_args, info['username'])
-
-
 
 
 if __name__ == "__main__":

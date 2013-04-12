@@ -1,15 +1,10 @@
 #!/usr/bin/env python
 
-import sys
-import jenkins
-import urllib
-import yaml
 import datetime
+import jenkins
 import os
 import pkg_resources
-from rospkg import environment
-
-
+import yaml
 
 JENKINS_SERVER = 'http://jenkins.willowgarage.com:8080/'
 
