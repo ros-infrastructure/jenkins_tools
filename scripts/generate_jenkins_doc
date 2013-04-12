@@ -14,7 +14,8 @@ import shutil
 
 ubuntu_distro = {'electric': ['lucid'],
                  'fuerte': ['precise'],
-                 'groovy': ['precise']}
+                 'groovy': ['precise'],
+                 'hydro': ['precise']}
 arch = ['amd64']
 
 def build_job(jenkins_instance, job_name):

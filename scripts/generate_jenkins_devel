@@ -11,7 +11,8 @@ from rospkg import environment
 import jenkins_tools
 
 ubuntu_distro = {'fuerte': ['precise'],
-                 'groovy': ['precise']}
+                 'groovy': ['precise'],
+                 'hydro': ['precise']}
 arch = ['amd64']
 
 
