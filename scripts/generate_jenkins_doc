@@ -69,7 +69,7 @@ def main():
     print "Created Jenkins instance"
 
     doc_jobs = []
-    for s in rosinstall_files:
+    for s in sorted(rosinstall_files):
         if s.endswith('depends'):
             continue
 

@@ -50,12 +50,14 @@ def main():
 
     # create all jobs
     devel_jobs = []
-    for s, conf in devel.iteritems():
+    for s in sorted(devel.keys()):
+        conf = devel[s]
         job_name = "devel-%s-%s" % (ros_distro, s)
         if conf['type'] == 'svn':
             conf['version'] = ''
-        if not conf['version']:
-            conf['version'] = ''
+        if conf['version'] is None:
+            print('- skip job "%s" because version is None' % job_name)
+            continue
         jenkins_tools.run_jenkins_vcs(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM',
                                       job_name, 'ros-buildfarm-devel@googlegroups.com',
                                       conf['type'], conf['url'], conf['version'],
