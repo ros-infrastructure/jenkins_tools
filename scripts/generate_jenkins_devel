@@ -8,6 +8,7 @@ import urllib
 import yaml
 
 import jenkins_tools
+from rosdistro import get_index, get_index_url, get_source_file
 from rospkg import environment
 
 ubuntu_distro = {'fuerte': ['precise'],
@@ -45,8 +46,20 @@ def main():
 
     # parse the devel distro file
     print "Parsing devel yaml file for %s" % ros_distro
-    f = urllib.urlopen('https://raw.github.com/ros/rosdistro/master/releases/%s-devel.yaml' % ros_distro)
-    devel = yaml.load(f.read())['repositories']
+    if ros_distro != 'fuerte':
+        index = get_index(get_index_url())
+        source_file = get_source_file(index, ros_distro)
+        devel = {}
+        for repo_name in source_file.repositories.keys():
+            repo = source_file.repositories[repo_name]
+            devel[repo_name] = {
+                'type': repo.type,
+                'url': repo.url,
+                'version': repo.version
+            }
+    else:
+        f = urllib.urlopen('https://raw.github.com/ros/rosdistro/master/releases/%s-devel.yaml' % ros_distro)
+        devel = yaml.load(f.read())['repositories']
 
     # create all jobs
     devel_jobs = []

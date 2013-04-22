@@ -10,6 +10,7 @@ import tempfile
 import yaml
 
 import jenkins_tools
+from rosdistro import get_index, get_index_url, get_doc_file
 from rospkg import environment
 
 ubuntu_distro = {'electric': ['lucid'],
@@ -27,6 +28,12 @@ def build_job(jenkins_instance, job_name):
         raise jenkins.JenkinsException('no such job[%s]' % (job_name))
     # pass parameters to create a POST request instead of GET
     return jenkins_instance.jenkins_open(urllib2.Request(jenkins_instance.build_job_url(job_name), 'foo=bar'))
+
+
+def get_doc_repository_names(distro):
+    index = get_index(get_index_url())
+    doc_file = get_doc_file(index, distro)
+    return doc_file.repositories.keys()
 
 
 def get_distro_rosinstalls(distro):
@@ -60,7 +67,10 @@ def main():
         sys.exit(0)
     ros_distro = args[0]
 
-    rosinstall_files = get_distro_rosinstalls(ros_distro)
+    if ros_distro != 'fuerte':
+        repo_names = get_doc_repository_names(ros_distro)
+    else:
+        repo_names = get_distro_rosinstalls(ros_distro)
 
     # create jenkins instance
     with open(os.path.join(environment.get_ros_home(), 'buildfarm', 'server.yaml')) as f:
@@ -69,14 +79,11 @@ def main():
     print "Created Jenkins instance"
 
     doc_jobs = []
-    for s in sorted(rosinstall_files):
-        if s.endswith('depends'):
-            continue
-
+    for repo_name in sorted(repo_names):
         for u in ubuntu_distro[ros_distro]:
             for a in arch:
-                job_name = 'doc-' + ros_distro + '-' + s
-                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, s], info['username'], priority=30)
+                job_name = 'doc-' + ros_distro + '-' + repo_name
+                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=30)
                 if options.run:
                     print "Running %s" % job_name
                     build_job(jenkins_instance, job_name)
