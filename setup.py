@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jenkins_tools',
-    version='0.0.47',
+    version='0.0.48',
     packages=['jenkins_tools'],
     package_dir = {'jenkins_tools':'src/jenkins_tools'},
     scripts = ['scripts/run_chroot_jenkins_now',
