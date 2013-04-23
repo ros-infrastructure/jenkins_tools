@@ -82,7 +82,8 @@ def main():
     for repo_name in sorted(repo_names):
         for u in ubuntu_distro[ros_distro]:
             for a in arch:
-                job_name = 'doc-' + ros_distro + '-' + repo_name
+                # replace forward slashes in repo names since they are not allowed in job names
+                job_name = 'doc-' + ros_distro + '-' + repo_name.replace('/', '__')
                 jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=30)
                 if options.run:
                     print "Running %s" % job_name

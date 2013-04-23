@@ -65,7 +65,8 @@ def main():
     devel_jobs = []
     for s in sorted(devel.keys()):
         conf = devel[s]
-        job_name = "devel-%s-%s" % (ros_distro, s)
+        # replace forward slashes in repo names since they are not allowed in job names
+        job_name = "devel-%s-%s" % (ros_distro, s.replace('/', '__'))
         if conf['type'] == 'svn':
             conf['version'] = ''
         if conf['version'] is None:
