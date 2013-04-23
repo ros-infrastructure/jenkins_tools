@@ -67,6 +67,9 @@ def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job
     for key, value in params.iteritems():
         job_xml = job_xml.replace("@(%s)" % key, value)
 
+    # replace forward slashes in job name since they are not allowed
+    job_name = job_name.replace('/', '__')
+
     # (re-)configure job
     if jenkins_instance.job_exists(job_name):
         jenkins_instance.reconfig_job(job_name, job_xml)
