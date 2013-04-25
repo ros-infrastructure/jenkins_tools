@@ -49,7 +49,9 @@ def get_distro_rosinstalls(distro):
     rosinstall_files = []
     for ls_file in os.listdir(os.path.join(temp_dir, "doc/%s" % distro)):
         if ls_file.endswith(".rosinstall"):
-            rosinstall_files.append(os.path.splitext(os.path.basename(ls_file))[0])
+            repo_name = os.path.splitext(os.path.basename(ls_file))[0]
+            if not repo_name.endswith('_depends'):
+                rosinstall_files.append(repo_name)
     shutil.rmtree(temp_dir)
 
     return rosinstall_files
