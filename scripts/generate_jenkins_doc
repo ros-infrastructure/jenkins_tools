@@ -10,7 +10,7 @@ import tempfile
 import yaml
 
 import jenkins_tools
-from rosdistro import get_index, get_index_url, get_doc_file
+from rosdistro import get_index, get_index_url, get_doc_build_files, get_doc_file
 from rospkg import environment
 
 ubuntu_distro = {'electric': ['lucid'],
@@ -33,7 +33,14 @@ def build_job(jenkins_instance, job_name):
 def get_doc_repository_names(distro):
     index = get_index(get_index_url())
     doc_file = get_doc_file(index, distro)
-    return doc_file.repositories.keys()
+
+    doc_build_files = get_doc_build_files(index, distro)
+    timeouts = []
+    for doc_build_file in doc_build_files:
+        repo_names = doc_build_file.filter_repositories(doc_file.repositories.keys())
+        timeouts.append((repo_names, doc_build_file.jenkins_job_timeout))
+    # TODO only works with one build file yet
+    return doc_file.repositories.keys(), timeouts[0][1]
 
 
 def get_distro_rosinstalls(distro):
@@ -70,9 +77,10 @@ def main():
     ros_distro = args[0]
 
     if ros_distro != 'fuerte':
-        repo_names = get_doc_repository_names(ros_distro)
+        repo_names, timeout = get_doc_repository_names(ros_distro)
     else:
         repo_names = get_distro_rosinstalls(ros_distro)
+        timeout = None
 
     # create jenkins instance
     with open(os.path.join(environment.get_ros_home(), 'buildfarm', 'server.yaml')) as f:
@@ -86,7 +94,7 @@ def main():
             for a in arch:
                 # replace forward slashes in repo names since they are not allowed in job names
                 job_name = 'doc-' + ros_distro + '-' + repo_name.replace('/', '__')
-                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=30)
+                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=30, timeout=timeout)
                 if options.run:
                     print "Running %s" % job_name
                     build_job(jenkins_instance, job_name)

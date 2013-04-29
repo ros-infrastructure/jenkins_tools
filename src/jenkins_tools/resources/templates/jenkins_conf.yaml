@@ -22,3 +22,6 @@
   'block': '<axes>@(AXIS)<hudson.matrix.LabelAxis><name>label</name><values><string>@(NODE)</string></values></hudson.matrix.LabelAxis></axes><executionStrategy class="hudson.matrix.DefaultMatrixExecutionStrategyImpl"><runSequentially>false</runSequentially></executionStrategy>'
   'axis': '<hudson.matrix.TextAxis><name>@(NAME)</name><values>@(VALUES)</values></hudson.matrix.TextAxis>'
   'value': '<string>@(VALUE)</string>'
+
+'timeout':
+  'absolute': '<hudson.plugins.build__timeout.BuildTimeoutWrapper><timeoutMinutes>@(MINUTES)</timeoutMinutes><failBuild>false</failBuild><writingDescription>true</writingDescription><timeoutType>absolute</timeoutType></hudson.plugins.build__timeout.BuildTimeoutWrapper>'

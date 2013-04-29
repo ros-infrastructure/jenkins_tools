@@ -8,7 +8,7 @@ import urllib
 import yaml
 
 import jenkins_tools
-from rosdistro import get_index, get_index_url, get_source_file
+from rosdistro import get_index, get_index_url, get_source_build_files, get_source_file
 from rospkg import environment
 
 ubuntu_distro = {'fuerte': ['precise'],
@@ -49,14 +49,26 @@ def main():
     if ros_distro != 'fuerte':
         index = get_index(get_index_url())
         source_file = get_source_file(index, ros_distro)
+
+        source_build_files = get_source_build_files(index, ros_distro)
+        timeouts = []
+        for source_build_file in source_build_files:
+            repo_names = source_build_file.filter_repositories(source_file.repositories.keys())
+            timeouts.append((repo_names, source_build_file.jenkins_job_timeout))
+
         devel = {}
         for repo_name in source_file.repositories.keys():
             repo = source_file.repositories[repo_name]
-            devel[repo_name] = {
+            repo_data = {
                 'type': repo.type,
                 'url': repo.url,
                 'version': repo.version
             }
+            # TODO only works with one build file yet
+            repo_names, timeout = timeouts[0]
+            if repo_name in repo_names and timeout:
+                repo_data['timeout'] = timeout
+            devel[repo_name] = repo_data
     else:
         f = urllib.urlopen('https://raw.github.com/ros/rosdistro/master/releases/%s-devel.yaml' % ros_distro)
         devel = yaml.load(f.read())['repositories']
@@ -76,7 +88,7 @@ def main():
                                       job_name, 'ros-buildfarm-devel@googlegroups.com',
                                       conf['type'], conf['url'], conf['version'],
                                       'devel', [ros_distro, s], info['username'],
-                                      {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']}, priority=60)
+                                      {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']}, priority=60, timeout=conf.get('timeout'))
         devel_jobs.append(job_name)
 
     # run jobs right now

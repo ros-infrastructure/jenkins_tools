@@ -18,7 +18,7 @@ setup(
                'scripts/chroot_create.sh',
                'scripts/chroot_update.sh',
                'scripts/chroot_dispatch.sh'],
-    install_requires=['empy', 'PyYAML', 'jenkins', 'argparse', 'rosdep', 'rospkg', 'catkin-pkg', 'distribute'],
+    install_requires=['empy', 'PyYAML', 'jenkins', 'argparse', 'rosdep', 'rosdistro >= 0.2.7', 'rospkg', 'catkin-pkg', 'distribute'],
     package_data = {'jenkins_tools': ['resources/templates/*']},
     author='Wim Meeussen',
     author_email='wim@hidof.com',
