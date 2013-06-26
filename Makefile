@@ -34,6 +34,7 @@ clean_dist:
 	-rm -f MANIFEST
 	-rm -rf dist
 	-rm -rf deb_dist
+	-rm -rf jenkins_tools.egg-info
 
 distro: setup clean_dist
 	python setup.py sdist
