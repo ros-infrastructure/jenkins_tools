@@ -94,11 +94,12 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, job_name, email, scri
 
 
 # configure a job with periodic trigger
-def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, job_name, email, period, script, script_args, user_name, matrix=None, priority=None, timeout=None):
+def run_jenkins_periodic(jenkins_instance, ubuntu_distro, arch, job_name, email, period, script, script_args, user_name, matrix=None, priority=None, timeout=None, additional_publishers=''):
     jc = _get_jenkins_conf()
     params = {}
     params['EMAIL_COMMITTER'] = 'false'
     params['TRIGGER'] = jc['triggers']['periodic'][period]
+    params['ADDITIONAL_PUBLISHERS'] = additional_publishers
     _update_jenkins_job(jenkins_instance, jc, ubuntu_distro, arch, job_name, email, script, script_args, user_name, params, matrix=matrix, priority=priority, timeout=timeout)
 
 

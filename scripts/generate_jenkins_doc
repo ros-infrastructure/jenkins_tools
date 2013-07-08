@@ -3,6 +3,7 @@
 import jenkins
 import optparse
 import os
+import pkg_resources
 import shutil
 import subprocess
 import sys
@@ -88,13 +89,15 @@ def main():
     jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
     print "Created Jenkins instance"
 
+    additional_publishers = pkg_resources.resource_string('jenkins_tools', 'resources/templates/publisher_extend_notification_recipients.xml')
+
     doc_jobs = []
     for repo_name in sorted(repo_names):
         for u in ubuntu_distro[ros_distro]:
             for a in arch:
                 # replace forward slashes in repo names since they are not allowed in job names
                 job_name = 'doc-' + ros_distro + '-' + repo_name.replace('/', '__')
-                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=30, timeout=timeout)
+                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=30, timeout=timeout, additional_publishers=additional_publishers)
                 if options.run:
                     print "Running %s" % job_name
                     build_job(jenkins_instance, job_name)
