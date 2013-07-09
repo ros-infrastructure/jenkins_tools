@@ -29,7 +29,6 @@ fi
 /bin/echo "Image stamp is $IMAGESTAMP"
 
 # get version stamp of chroot_update script
-sudo apt-get install apt-show-versions --yes
 REPOSTAMP=$(apt-show-versions python-jenkins-tools  | awk '{for (i = 0; i < 10; i++)  if ( !match($i, " ") && match($i, "[0-9].[0-9]") ) print $i}')
 /bin/echo "Repo stamp is $REPOSTAMP"
 
