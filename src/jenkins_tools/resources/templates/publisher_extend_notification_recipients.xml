@@ -37,4 +37,4 @@ for(p in publishers) {
 //println ""
       </groovyScript>
       <behavior>0</behavior>
-    </org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildRecorder></command>
+    </org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildRecorder>
