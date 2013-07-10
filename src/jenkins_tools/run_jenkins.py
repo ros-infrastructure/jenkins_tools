@@ -79,10 +79,11 @@ def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job
 
 
 # configure a job and trigger a build
-def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, job_name, email, script, script_args, user_name, parameters=None, matrix=None):
+def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, job_name, email, script, script_args, user_name, parameters=None, matrix=None, additional_publishers=''):
     jc = _get_jenkins_conf()
     params = {}
     params['EMAIL_COMMITTER'] = 'false'
+    params['ADDITIONAL_PUBLISHERS'] = additional_publishers
     _update_jenkins_job(jenkins_instance, jc, ubuntu_distro, arch, job_name, email, script, script_args, user_name, custom_params=params, parameters=parameters, matrix=matrix)
     # build all jobs
     if not parameters or len(parameters) == 0:
