@@ -1,1 +1,1 @@
-recursive-include bloom *.em
+recursive-include src/jenkins_tools/resources/templates *
