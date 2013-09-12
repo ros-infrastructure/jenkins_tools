@@ -6,7 +6,7 @@ import os
 import pkg_resources
 import yaml
 
-JENKINS_SERVER = 'http://jenkins.willowgarage.com:8080/'
+JENKINS_SERVER = 'http://jenkins.ros.org/'
 
 
 def build_job(jenkins_instance, job_name, parameters=None):

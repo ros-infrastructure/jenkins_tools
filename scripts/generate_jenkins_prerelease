@@ -67,7 +67,7 @@ def main():
                                   {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']},  # matrix
                                   additional_publishers=additional_publishers)
     build_job(jenkins_instance, job_name)
-    print "View the job's progress on <http://jenkins.willowgarage.com:8080/view/Prerelease/job/%s>" % job_name
+    print "View the job's progress on <http://jenkins.ros.org/view/Prerelease/job/%s>" % job_name
 
 
 if __name__ == "__main__":
