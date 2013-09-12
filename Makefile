@@ -7,23 +7,6 @@ CHANGENAME=jenkinstools
 
 OUTPUT_DIR=deb_dist
 
-USERNAME := $(shell whoami)
-# If william, use my WG login wwoodall
-ifeq ($(USERNAME),william)
-	USERNAME := wwoodall
-endif
-
-UNAME := $(shell uname)
-
-.PHONY: doc
-doc:
-	python setup.py build_sphinx
-ifeq ($(UNAME),Darwin)
-	@open doc/build/html/index.html
-else
-	@echo "Not opening index.html on $(UNAME)"
-endif
-
 all:
 	echo "noop for debbuild"
 
@@ -41,7 +24,7 @@ distro: setup clean_dist
 
 push: distro
 	python setup.py sdist register upload
-	scp dist/${NAME}-${VERSION}.tar.gz root@ipr.willowgarage.com:/var/www/pr.willowgarage.com/html/downloads/${NAME}
+	scp dist/${NAME}-${VERSION}.tar.gz ros@ftp-osl.osuosl.org:/home/ros/data/download.ros.org/downloads/${NAME}
 
 clean: clean_dist
 	echo "clean"
@@ -62,7 +45,7 @@ upload-building: deb_dist
 upload: upload-building upload-packages
 
 testsetup:
-	echo "running jenkins_tools! tests"
+	echo "running ${NAME} tests"
 
 test: testsetup
 	python setup.py nosetests
