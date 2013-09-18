@@ -1,5 +1,5 @@
-Jenkins_Tools -- 0.2.0
-==============
+jenkins_tools
+=============
 
 .. Links
 
