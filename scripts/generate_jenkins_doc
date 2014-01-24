@@ -11,7 +11,7 @@ import tempfile
 import yaml
 
 import jenkins_tools
-from rosdistro import get_index, get_index_url, get_doc_build_files, get_doc_file
+from rosdistro import get_doc_build_files, get_distribution_file, get_index, get_index_url
 from rospkg import environment
 
 ubuntu_distro = {'electric': ['lucid'],
@@ -33,15 +33,16 @@ def build_job(jenkins_instance, job_name):
 
 def get_doc_repository_names(distro):
     index = get_index(get_index_url())
-    doc_file = get_doc_file(index, distro)
+    distribution_file = get_distribution_file(index, distro)
+    doc_repo_names = [repo_name for repo_name in distribution_file.repositories.keys() if distribution_file.repositories[repo_name].doc_repository is not None]
 
     doc_build_files = get_doc_build_files(index, distro)
     timeouts = []
     for doc_build_file in doc_build_files:
-        repo_names = doc_build_file.filter_repositories(doc_file.repositories.keys())
+        repo_names = doc_build_file.filter_repositories(doc_repo_names)
         timeouts.append((repo_names, doc_build_file.jenkins_job_timeout))
     # TODO only works with one build file yet
-    return doc_file.repositories.keys(), timeouts[0][1]
+    return doc_repo_names, timeouts[0][1]
 
 
 def get_distro_rosinstalls(distro):

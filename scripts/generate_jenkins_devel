@@ -8,7 +8,7 @@ import urllib
 import yaml
 
 import jenkins_tools
-from rosdistro import get_index, get_index_url, get_source_build_files, get_source_file
+from rosdistro import get_distribution_file, get_index, get_index_url, get_source_build_files
 from rospkg import environment
 
 ubuntu_distro = {'fuerte': ['precise'],
@@ -48,17 +48,18 @@ def main():
     print "Parsing devel yaml file for %s" % ros_distro
     if ros_distro != 'fuerte':
         index = get_index(get_index_url())
-        source_file = get_source_file(index, ros_distro)
+        distribution_file = get_distribution_file(index, ros_distro)
+        source_repo_names = [repo_name for repo_name in distribution_file.repositories.keys() if distribution_file.repositories[repo_name].source_repository is not None]
 
         source_build_files = get_source_build_files(index, ros_distro)
         timeouts = []
         for source_build_file in source_build_files:
-            repo_names = source_build_file.filter_repositories(source_file.repositories.keys())
+            repo_names = source_build_file.filter_repositories(source_repo_names)
             timeouts.append((repo_names, source_build_file.jenkins_job_timeout))
 
         devel = {}
-        for repo_name in source_file.repositories.keys():
-            repo = source_file.repositories[repo_name]
+        for repo_name in source_repo_names:
+            repo = distribution_file.repositories[repo_name].source_repository
             repo_data = {
                 'type': repo.type,
                 'url': repo.url,
