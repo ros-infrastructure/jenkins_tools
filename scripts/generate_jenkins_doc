@@ -98,7 +98,7 @@ def main():
             for a in arch:
                 # replace forward slashes in repo names since they are not allowed in job names
                 job_name = 'doc-' + ros_distro + '-' + repo_name.replace('/', '__')
-                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=30, timeout=timeout, additional_publishers=additional_publishers)
+                jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=970, timeout=timeout, additional_publishers=additional_publishers)
                 if options.run:
                     print "Running %s" % job_name
                     build_job(jenkins_instance, job_name)
