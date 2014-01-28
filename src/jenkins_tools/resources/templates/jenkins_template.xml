@@ -12,9 +12,10 @@
   @(MATRIX)
   <properties>
     @(PARAMETERS)
-    <hudson.queueSorter.PrioritySorterJobProperty>
+    <jenkins.advancedqueue.AdvancedQueueSorterJobProperty plugin="PrioritySorter@2.6">
+      <useJobPriority>true</useJobPriority>
       <priority>@(PRIORITY)</priority>
-    </hudson.queueSorter.PrioritySorterJobProperty>
+    </jenkins.advancedqueue.AdvancedQueueSorterJobProperty>
   </properties>
   @(VCS)
   <assignedNode>@(NODE)</assignedNode>

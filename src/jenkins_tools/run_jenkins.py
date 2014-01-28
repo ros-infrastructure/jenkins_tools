@@ -47,7 +47,7 @@ def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job
     params['TRIGGER'] = jenkins_conf['triggers']['none']
     params['VCS'] = jenkins_conf['vcs']['none']
 
-    params['PRIORITY'] = str(priority) if priority else '100'  # 100 minutes is the default priority
+    params['PRIORITY'] = str(priority) if priority else '900'  # 900 is our default priority
 
     params['TIMEOUT'] = jenkins_conf['timeout']['absolute'].replace('@(MINUTES)', str(timeout)) if timeout else ''
 
