@@ -13,7 +13,8 @@ from rospkg import environment
 
 ubuntu_distro = {'fuerte': ['precise'],
                  'groovy': ['precise'],
-                 'hydro': ['precise']}
+                 'hydro': ['precise'],
+                 'indigo': ['trusty']}
 arch = ['amd64']
 
 
@@ -89,7 +90,7 @@ def main():
                                       job_name, 'ros-buildfarm-devel@googlegroups.com',
                                       conf['type'], conf['url'], conf['version'],
                                       'devel', [ros_distro, s], info['username'],
-                                      {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']}, priority=940, timeout=conf.get('timeout'))
+                                      {'UBUNTU_PARAM': ubuntu_distro[ros_distro], 'ARCH_PARAM': arch}, priority=940, timeout=conf.get('timeout'))
         devel_jobs.append(job_name)
 
     # run jobs right now
