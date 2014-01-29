@@ -72,10 +72,10 @@ def _update_jenkins_job(jenkins_instance, jenkins_conf, ubuntu_distro, arch, job
     # (re-)configure job
     if jenkins_instance.job_exists(job_name):
         jenkins_instance.reconfig_job(job_name, job_xml)
-        print "Reconfigured job %s" % job_name
+        print("Reconfigured job %s" % job_name)
     else:
         jenkins_instance.create_job(job_name, job_xml)
-        print "Created job %s" % job_name
+        print("Created job %s" % job_name)
 
 
 # configure a job and trigger a build
@@ -91,7 +91,7 @@ def run_jenkins_now(jenkins_instance, ubuntu_distro, arch, job_name, email, scri
     else:
         for p in parameters:
             build_job(jenkins_instance, job_name, p)
-    print "Started job %s" % job_name
+    print("Started job %s" % job_name)
 
 
 # configure a job with periodic trigger

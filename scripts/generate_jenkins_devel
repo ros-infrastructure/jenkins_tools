@@ -35,7 +35,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if len(args) != 1:
-        print "Usage: %s ros_distro" % (sys.argv[0])
+        print("Usage: %s ros_distro" % (sys.argv[0]))
         sys.exit(0)
     ros_distro = args[0]
 
@@ -45,7 +45,7 @@ def main():
     jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
 
     # parse the devel distro file
-    print "Parsing devel yaml file for %s" % ros_distro
+    print("Parsing devel yaml file for %s" % ros_distro)
     if ros_distro != 'fuerte':
         index = get_index(get_index_url())
         distribution_file = get_distribution_file(index, ros_distro)
@@ -96,7 +96,7 @@ def main():
     if options.run:
         for d in devel_jobs:
             build_job(jenkins_instance, d)
-            print "Started job %s" % d
+            print("Started job %s" % d)
 
     # delete old jobs
     if options.delete:
@@ -108,7 +108,7 @@ def main():
 
         for r in remove:
             jenkins_instance.delete_job(r)
-            print "Deleted old job %s" % r
+            print("Deleted old job %s" % r)
 
 
 if __name__ == "__main__":
