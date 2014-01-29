@@ -50,10 +50,10 @@ def get_distro_rosinstalls(distro):
     helper = subprocess.Popen(["git", "clone", "git://github.com/ros/rosdistro.git", temp_dir])
     helper.communicate()
     if helper.returncode != 0:
-        print "Failed to checkout doc repo!"
+        print("Failed to checkout doc repo!")
         return []
 
-    print "Building list of repos for distro %s" % distro
+    print("Building list of repos for distro %s" % distro)
 
     rosinstall_files = []
     for ls_file in os.listdir(os.path.join(temp_dir, "doc/%s" % distro)):
@@ -73,8 +73,8 @@ def main():
     parser.add_option("--run", action="store_true", default=False)
     (options, args) = parser.parse_args()
     if len(args) != 1:
-        print "Usage: %s ros_distro" % (sys.argv[0])
-        print "Ex: %s fuerte" % (sys.argv[0])
+        print("Usage: %s ros_distro" % (sys.argv[0]))
+        print("Ex: %s fuerte" % (sys.argv[0]))
         sys.exit(0)
     ros_distro = args[0]
 
@@ -88,7 +88,7 @@ def main():
     with open(os.path.join(environment.get_ros_home(), 'buildfarm', 'server.yaml')) as f:
         info = yaml.load(f)
     jenkins_instance = jenkins.Jenkins(jenkins_tools.JENKINS_SERVER, info['username'], info['password'])
-    print "Created Jenkins instance"
+    print("Created Jenkins instance")
 
     additional_publishers = pkg_resources.resource_string('jenkins_tools', 'resources/templates/publisher_extend_notification_recipients.xml')
 
@@ -100,24 +100,24 @@ def main():
                 job_name = 'doc-' + ros_distro + '-' + repo_name.replace('/', '__')
                 jenkins_tools.run_jenkins_periodic(jenkins_instance, u, a, job_name, "ros-buildfarm-doc@googlegroups.com", "nightly", "doc", [ros_distro, repo_name], info['username'], priority=970, timeout=timeout, additional_publishers=additional_publishers)
                 if options.run:
-                    print "Running %s" % job_name
+                    print("Running %s" % job_name)
                     build_job(jenkins_instance, job_name)
-                print "\n"
+                print("\n")
                 doc_jobs.append(job_name)
 
     # delete old jobs
     if options.delete:
-        print "Checking for jobs to delete..."
+        print("Checking for jobs to delete...")
         remove = []
         current_jobs = [j['name'] for j in jenkins_instance.get_jobs()]
         for c in current_jobs:
             if 'doc-%s' % ros_distro in c and not c in doc_jobs:
                 remove.append(c)
-        print "done"
+        print("done")
 
         for r in remove:
             jenkins_instance.delete_job(r)
-            print "Deleted old job %s" % r
+            print("Deleted old job %s" % r)
 
 if __name__ == "__main__":
     main()

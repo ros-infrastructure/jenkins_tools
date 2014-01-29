@@ -11,7 +11,7 @@ from rospkg import environment
 
 def main():
     if len(sys.argv) < 7:
-        print "Usage: %s ubuntu_distro arch email {continuous/nightly/daily/weekly/monthly} script [script_args]" % (sys.argv[0])
+        print("Usage: %s ubuntu_distro arch email {continuous/nightly/daily/weekly/monthly} script [script_args]" % (sys.argv[0]))
         sys.exit(0)
 
     ubuntu_distro = sys.argv[1]

@@ -32,7 +32,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if len(args) != 0:
-        print "Usage: %s" % (sys.argv[0])
+        print("Usage: %s" % (sys.argv[0]))
         sys.exit(0)
 
     # create jenkins instance
@@ -52,22 +52,22 @@ def main():
         jobs = [j for j in jobs if options.contains in j]
 
     if len(jobs) == 0:
-        print "No jobs found that match these criteria"
+        print("No jobs found that match these criteria")
         return
 
-    print
-    print "THESE JOBS WILL BE DELETED!!!!!!!!"
-    print
+    print('')
+    print("THESE JOBS WILL BE DELETED!!!!!!!!")
+    print('')
     for j in jobs:
-        print j
-    print
-    print "THESE JOBS WILL BE DELETED!!!!!!!!"
-    print
+        print(j)
+    print('')
+    print("THESE JOBS WILL BE DELETED!!!!!!!!")
+    print('')
 
     add = ''
     for _ in range(4):
         add += "really "
-        print "Are you %ssure? (y/n)" % add
+        print("Are you %ssure? (y/n)" % add)
         key = getch()
         while not key in ['y', 'Y', 'n', 'N']:
             key = getch()
@@ -75,11 +75,11 @@ def main():
             return
 
     # delete jobs
-    print "Okay, here we go"
+    print("Okay, here we go")
     for j in jobs:
         jenkins_instance.delete_job(j)
-        print "Deleted %s" % j
-    print "Done!!!!!!"
+        print("Deleted %s" % j)
+    print("Done!!!!!!")
 
 if __name__ == "__main__":
     main()
