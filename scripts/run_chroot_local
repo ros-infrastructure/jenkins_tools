@@ -7,7 +7,7 @@ fi
 # support relative workspace
 export OS_NAME="ubuntu"
 export IMAGETYPE="jenkins_tools"
-export IMAGEVERSION="0.4.1"
+export IMAGEVERSION="0.4.2"
 
 # get arguments of run_local
 export UBUNTU_DISTRO=$1

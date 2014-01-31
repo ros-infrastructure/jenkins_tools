@@ -15,7 +15,7 @@ ROOTDIR=$BASE/apt-conf-$IMAGVERSION
 echo $IMAGEFILE > $IMAGEFILE_FILENAME
 
 if [ ! -f $IMAGEFILE ] ; then
-    sudo flock $IMAGELOCK -c "pbuilder --create --distribution $DISTRO --architecture $ARCH --basetgz $IMAGEFILE --debootstrapopts --variant=buildd --components \"main universe multiverse\" --othermirror \"deb http://us.archive.ubuntu.com/ubuntu/ $DISTRO-updates main restricted\" --debootstrapopts --keyring=/etc/apt/trusted.gpg"
+    sudo flock $IMAGELOCK -c "pbuilder --create --distribution $DISTRO --architecture $ARCH --basetgz $IMAGEFILE --debootstrapopts --variant=buildd --components \"main universe multiverse\" --othermirror \"deb http://us.archive.ubuntu.com/ubuntu/ $DISTRO-updates main restricted\" --debootstrapopts --keyring=/etc/apt/trusted.gpg --extrapackages python"
 fi
 
 UPDATE=/usr/bin/chroot_update.sh
