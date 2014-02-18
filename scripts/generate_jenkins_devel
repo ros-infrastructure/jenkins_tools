@@ -3,6 +3,7 @@
 import jenkins
 import optparse
 import os
+import pkg_resources
 import sys
 import urllib
 import yaml
@@ -86,11 +87,14 @@ def main():
         if conf['version'] is None:
             print('- skip job "%s" because version is None' % job_name)
             continue
+
+        additional_publishers = pkg_resources.resource_string('jenkins_tools', 'resources/templates/publisher_extend_notification_recipients.xml')
+
         jenkins_tools.run_jenkins_vcs(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM',
                                       job_name, 'ros-buildfarm-devel@googlegroups.com',
                                       conf['type'], conf['url'], conf['version'],
                                       'devel', [ros_distro, s], info['username'],
-                                      {'UBUNTU_PARAM': ubuntu_distro[ros_distro], 'ARCH_PARAM': arch}, priority=940, timeout=conf.get('timeout'))
+                                      {'UBUNTU_PARAM': ubuntu_distro[ros_distro], 'ARCH_PARAM': arch}, priority=940, timeout=conf.get('timeout'), additional_publishers=additional_publishers)
         devel_jobs.append(job_name)
 
     # run jobs right now
