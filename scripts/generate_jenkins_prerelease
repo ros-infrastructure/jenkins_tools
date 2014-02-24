@@ -59,12 +59,13 @@ def main():
     additional_publishers = pkg_resources.resource_string('jenkins_tools', 'resources/templates/publisher_notification_on_success.xml')
 
     # create all jobs
+    ubuntu_param = 'trusty' if ros_distro == 'indigo' else 'precise'
     jenkins_tools.run_jenkins_now(jenkins_instance, '$UBUNTU_PARAM', '$ARCH_PARAM', job_name, 'ros-buildfarm-prerelease@googlegroups.com $EMAIL_PARAM',
                                   'prerelease',  # script to run
                                   script_args,  # script arguments
                                   info['username'],  # user name
                                   parameters,  # parameters
-                                  {'UBUNTU_PARAM': ['precise'], 'ARCH_PARAM': ['amd64']},  # matrix
+                                  {'UBUNTU_PARAM': [ubuntu_param], 'ARCH_PARAM': ['amd64']},  # matrix
                                   additional_publishers=additional_publishers)
     build_job(jenkins_instance, job_name)
     print("View the job's progress on <http://jenkins.ros.org/view/Prerelease/job/%s>" % job_name)
