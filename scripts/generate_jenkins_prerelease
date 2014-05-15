@@ -54,7 +54,7 @@ def main():
     for r, p, v in zip(repo_names, param_names, repo_versions):
         parameters[0][p] = v
         script_args.append(r)
-        script_args.append('$' + p)
+        script_args.append('${%s}' % p)
 
     additional_publishers = pkg_resources.resource_string('jenkins_tools', 'resources/templates/publisher_notification_on_success.xml')
 
