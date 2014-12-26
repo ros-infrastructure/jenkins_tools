@@ -18,7 +18,8 @@ ubuntu_distro = {'electric': ['lucid'],
                  'fuerte': ['precise'],
                  'groovy': ['precise'],
                  'hydro': ['precise'],
-                 'indigo': ['trusty']}
+                 'indigo': ['trusty'],
+                 'jade': ['trusty']}
 arch = ['amd64']
 
 

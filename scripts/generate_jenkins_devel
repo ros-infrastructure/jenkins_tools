@@ -15,7 +15,8 @@ from rospkg import environment
 ubuntu_distro = {'fuerte': ['precise'],
                  'groovy': ['precise'],
                  'hydro': ['precise'],
-                 'indigo': ['trusty']}
+                 'indigo': ['trusty'],
+                 'jade': ['trusty']}
 arch = ['amd64']
 
 
